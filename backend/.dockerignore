@@ -1,0 +1,12 @@
+__pycache__
+*.pyc
+*.pyo
+.pytest_cache
+tests/
+*.log
+.env
+venv/
+.venv/
+adapters/
+# FAISS index is mounted as a volume, not baked in
+rag/index/

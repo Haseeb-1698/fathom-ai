@@ -1,0 +1,164 @@
+version: "3.9"
+
+# Fathom — full stack on a single VM (134.199.201.243)
+#
+# Services:
+#   neo4j     — graph database (port 7687 bolt, 7474 browser)
+#   backend   — FastAPI app (port 7860)
+#   dashboard — Next.js UI (port 3000)
+#
+# The Fathom model (serve.py) runs OUTSIDE Docker directly on the host
+# so it has native ROCm/GPU access. It listens on host port 8000.
+# backend reaches it via host.docker.internal:8000 (or host network).
+
+services:
+
+  # ── MinIO Object Storage (S3-compatible file storage) ─────────────────
+  minio:
+    image: minio/minio:latest
+    container_name: fathom-minio
+    restart: unless-stopped
+    command: server /data --console-address ":9001"
+    environment:
+      MINIO_ROOT_USER: "${MINIO_ROOT_USER:-fathom}"
+      MINIO_ROOT_PASSWORD: "${MINIO_ROOT_PASSWORD:-change-me}"
+    ports:
+      - "9000:9000"   # S3 API
+      - "9001:9001"   # Web console
+    volumes:
+      - minio_data:/data
+    healthcheck:
+      test: ["CMD", "curl", "-f", "http://localhost:9000/minio/health/live"]
+      interval: 15s
+      timeout: 5s
+      retries: 3
+      start_period: 10s
+
+  # ── Neo4j ──────────────────────────────────────────────────────────────
+  neo4j:
+    image: neo4j:5
+    container_name: fathom-neo4j
+    restart: unless-stopped
+    environment:
+      NEO4J_AUTH: "neo4j/${NEO4J_PASSWORD:-change-me}"
+      NEO4J_PLUGINS: '["apoc"]'
+      NEO4J_server_memory_heap_max__size: "4G"
+      NEO4J_server_memory_heap_initial__size: "512m"
+      NEO4J_dbms_memory_pagecache_size: "2G"
+      NEO4J_dbms_security_procedures_unrestricted: "apoc.*"
+    ports:
+      - "7687:7687"   # bolt
+      - "7474:7474"   # browser UI
+    volumes:
+      - fathom_neo4j_data:/data
+      - fathom_neo4j_logs:/logs
+    healthcheck:
+      test: ["CMD", "cypher-shell", "-u", "neo4j", "-p", "${NEO4J_PASSWORD:-fathom2024}", "RETURN 1"]
+      interval: 15s
+      timeout: 10s
+      retries: 5
+      start_period: 30s
+
+  # ── Neo4j schema init (runs once, exits) ──────────────────────────────
+  neo4j-init:
+    image: neo4j:5
+    container_name: fathom-neo4j-init
+    restart: "no"
+    network_mode: host
+    environment:
+      NEO4J_PASSWORD: "${NEO4J_PASSWORD:-fathom2024}"
+    volumes:
+      - ./backend/graph/schema.cypher:/schema.cypher:ro
+    entrypoint: >
+      sh -c "
+        echo 'Waiting for Neo4j...' &&
+        until cypher-shell -a bolt://localhost:7687 -u neo4j -p $${NEO4J_PASSWORD:-fathom2024} 'RETURN 1' > /dev/null 2>&1; do sleep 3; done &&
+        echo 'Running schema init...' &&
+        cypher-shell -a bolt://localhost:7687 -u neo4j -p $${NEO4J_PASSWORD:-fathom2024} --file /schema.cypher &&
+        echo 'Schema init complete.'
+      "
+    depends_on:
+      neo4j:
+        condition: service_healthy
+
+  # ── Fathom API Backend ─────────────────────────────────────────────────
+  backend:
+    build:
+      context: ./backend
+      dockerfile: Dockerfile
+    container_name: fathom-backend
+    restart: unless-stopped
+    network_mode: host          # host network so it can reach serve.py on :8000
+    environment:
+      # Model VM — serve.py runs on host port 8000
+      FATHOM_ENDPOINT: "http://127.0.0.1:8000"
+
+      # Azure AI Foundry (Kimi-K2.5 enrichment)
+      AZURE_API_KEY: "${AZURE_API_KEY}"
+      AZURE_ENDPOINT: "${AZURE_ENDPOINT:-https://cb26haseeb-5473-resource.openai.azure.com/openai/v1}"
+      AZURE_MODEL: "${AZURE_MODEL:-Kimi-K2.5}"
+
+      # Neo4j — on same host via Docker bridge
+      NEO4J_URI: "bolt://localhost:7687"
+      NEO4J_USER: "neo4j"
+      NEO4J_PASSWORD: "${NEO4J_PASSWORD:-fathom2024}"
+
+      # HuggingFace (sentence-transformers download)
+      HF_TOKEN: "${HF_TOKEN}"
+
+      # MinIO object storage
+      MINIO_ENDPOINT: "${MINIO_ENDPOINT:-localhost:9000}"
+      MINIO_ROOT_USER: "${MINIO_ROOT_USER:-fathom}"
+      MINIO_ROOT_PASSWORD: "${MINIO_ROOT_PASSWORD:-change-me}"
+      MINIO_SECURE: "false"
+
+      # Optional bearer token auth
+      API_TOKENS: "${API_TOKENS:-}"
+
+      # Langfuse observability (optional — leave blank to disable)
+      LANGFUSE_PUBLIC_KEY: "${LANGFUSE_PUBLIC_KEY:-}"
+      LANGFUSE_SECRET_KEY: "${LANGFUSE_SECRET_KEY:-}"
+      LANGFUSE_HOST: "${LANGFUSE_HOST:-https://cloud.langfuse.com}"
+    volumes:
+      # FAISS index — pre-built, mounted read-only from repo
+      - ./backend/rag/index:/app/rag/index:ro
+      # Adapter weights (downloaded from HF Hub at runtime)
+      - fathom_adapters:/app/adapters
+      # HF model cache (sentence-transformers, ~420MB, cached after first run)
+      - hf_cache:/root/.cache/huggingface
+    depends_on:
+      neo4j:
+        condition: service_healthy
+    healthcheck:
+      test: ["CMD", "curl", "-f", "http://localhost:7860/health"]
+      interval: 30s
+      timeout: 10s
+      retries: 3
+      start_period: 60s
+
+  # ── Next.js Dashboard ──────────────────────────────────────────────────
+  dashboard:
+    build:
+      context: ./dashboard
+      dockerfile: Dockerfile
+    container_name: fathom-dashboard
+    restart: unless-stopped
+    ports:
+      - "3000:3000"
+    environment:
+      NEXT_PUBLIC_API_URL: "http://134.199.201.243:7860"
+    depends_on:
+      - backend
+
+volumes:
+  # Neo4j — use existing Docker Desktop volumes so data is preserved
+  fathom_neo4j_data:
+    external: true
+  fathom_neo4j_logs:
+    external: true
+  # MinIO file storage
+  minio_data:
+  # New named volumes for backend
+  fathom_adapters:
+  hf_cache:
+

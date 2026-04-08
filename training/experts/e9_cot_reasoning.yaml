@@ -1,0 +1,46 @@
+### LlamaFactory config — E9: CoT Reasoning Expert
+### Causal-reasoning fine-tune on Joe Sandbox AI summaries + real RE blog posts
+### Usage: llamafactory-cli train experts/e9_cot_reasoning.yaml
+
+model_name_or_path: mistralai/Mixtral-8x7B-Instruct-v0.1
+dataset: fathom_joe_cot,fathom_blog_cot,fathom_cot_supplement
+dataset_dir: /workspace/fathom/training/experts
+template: alpaca
+
+# LoRA configuration
+finetuning_type: lora
+lora_target: q_proj,v_proj,k_proj,o_proj
+lora_rank: 32
+lora_alpha: 64
+lora_dropout: 0.0
+
+# Quantization
+quantization_bit: 4
+quantization_method: bitsandbytes
+
+# Training hyperparameters — small dataset, more epochs
+per_device_train_batch_size: 2
+per_device_eval_batch_size: 2
+gradient_accumulation_steps: 4
+learning_rate: 5.0e-5
+num_train_epochs: 5
+max_grad_norm: 1.0
+lr_scheduler_type: cosine
+warmup_steps: 50
+
+# Sequence — long outputs need more space
+cutoff_len: 3072
+
+# Logging & saving
+logging_steps: 10
+save_steps: 200
+eval_steps: 200
+save_total_limit: 2
+
+# Performance
+flash_attn: fa2
+bf16: true
+
+# Output
+output_dir: /workspace/checkpoints/expert-e9-cot
+overwrite_output_dir: true

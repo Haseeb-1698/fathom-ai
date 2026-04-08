@@ -1,0 +1,144 @@
+@import "tailwindcss";
+
+/* ── Fathom Cyber Theme ─────────────────────────────────────── */
+:root {
+  --bg-primary: #06060B;
+  --bg-surface: #0D0D14;
+  --bg-card: #12121C;
+  --bg-card-hover: #181825;
+  --bg-elevated: #1E1E2E;
+
+  --accent: #00D4AA;
+  --accent-dim: #00B894;
+  --accent-glow: rgba(0, 212, 170, 0.15);
+  --accent-glow-strong: rgba(0, 212, 170, 0.3);
+
+  --secondary: #7C3AED;
+  --secondary-dim: #6D28D9;
+  --secondary-glow: rgba(124, 58, 237, 0.15);
+
+  --danger: #EF4444;
+  --warning: #F59E0B;
+  --success: #10B981;
+
+  --text-primary: #E2E8F0;
+  --text-secondary: #94A3B8;
+  --text-muted: #475569;
+  --text-accent: #00D4AA;
+
+  --border: #1E293B;
+  --border-accent: rgba(0, 212, 170, 0.2);
+
+  --radius: 12px;
+  --radius-lg: 16px;
+  --radius-sm: 8px;
+}
+
+@theme inline {
+  --color-background: var(--bg-primary);
+  --color-foreground: var(--text-primary);
+  --font-sans: var(--font-geist-sans);
+  --font-mono: var(--font-geist-mono);
+}
+
+* { scrollbar-width: thin; scrollbar-color: var(--accent-dim) var(--bg-surface); }
+
+body {
+  background: var(--bg-primary);
+  color: var(--text-primary);
+  font-family: var(--font-sans), system-ui, sans-serif;
+  -webkit-font-smoothing: antialiased;
+  overflow-x: hidden;
+}
+
+::selection { background: var(--accent-glow-strong); color: var(--accent); }
+
+/* ── Glow Utilities ────────────────────────────────────────── */
+.glow-teal { box-shadow: 0 0 20px var(--accent-glow), 0 0 60px var(--accent-glow); }
+.glow-teal-strong { box-shadow: 0 0 30px var(--accent-glow-strong), 0 0 80px var(--accent-glow); }
+.glow-purple { box-shadow: 0 0 20px var(--secondary-glow), 0 0 60px var(--secondary-glow); }
+.text-glow-teal { text-shadow: 0 0 20px var(--accent-glow-strong), 0 0 40px var(--accent-glow); }
+
+/* ── Gradient Utilities ────────────────────────────────────── */
+.gradient-teal { background: linear-gradient(135deg, var(--accent), var(--accent-dim)); }
+.gradient-teal-purple { background: linear-gradient(135deg, var(--accent), var(--secondary)); }
+.gradient-text-teal {
+  background: linear-gradient(135deg, var(--accent), #34D399);
+  -webkit-background-clip: text; -webkit-text-fill-color: transparent;
+  background-clip: text;
+}
+.gradient-text-teal-purple {
+  background: linear-gradient(135deg, var(--accent), var(--secondary));
+  -webkit-background-clip: text; -webkit-text-fill-color: transparent;
+  background-clip: text;
+}
+
+/* ── Cyber Grid Background ─────────────────────────────────── */
+.cyber-grid {
+  background-image:
+    linear-gradient(var(--border) 1px, transparent 1px),
+    linear-gradient(90deg, var(--border) 1px, transparent 1px);
+  background-size: 60px 60px;
+}
+
+/* ── Scan Line ─────────────────────────────────────────────── */
+.scan-line {
+  background: linear-gradient(180deg, transparent, var(--accent-glow), transparent);
+  height: 2px;
+  animation: scan 3s ease-in-out infinite;
+}
+@keyframes scan {
+  0%, 100% { transform: translateY(-100vh); opacity: 0; }
+  50% { transform: translateY(100vh); opacity: 1; }
+}
+
+/* ── Fingerprint Pulse (Hero) ──────────────────────────────── */
+.fingerprint-pulse { animation: fp-pulse 3s ease-in-out infinite; }
+@keyframes fp-pulse {
+  0%, 100% { opacity: 0.3; transform: scale(1); }
+  50% { opacity: 0.7; transform: scale(1.05); }
+}
+
+/* ── Floating Particle ─────────────────────────────────────── */
+.particle {
+  position: absolute; width: 2px; height: 2px;
+  background: var(--accent); border-radius: 50%; opacity: 0;
+  animation: float-up 4s ease-in-out infinite;
+}
+@keyframes float-up {
+  0% { opacity: 0; transform: translateY(0) scale(0); }
+  20% { opacity: 0.8; transform: translateY(-20px) scale(1); }
+  100% { opacity: 0; transform: translateY(-100px) scale(0.5); }
+}
+
+/* ── Card Hover ────────────────────────────────────────────── */
+.card-hover { transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1); }
+.card-hover:hover {
+  transform: translateY(-4px);
+  box-shadow: 0 8px 30px var(--accent-glow), 0 0 1px var(--accent);
+  border-color: var(--accent) !important;
+}
+
+/* ── Noise Texture ─────────────────────────────────────────── */
+/* noise overlay disabled for perf — enable with .noise-overlay-on */
+.noise-overlay-on::before {
+  content: ''; position: fixed; inset: 0;
+  background-image: url("data:image/svg+xml,%3Csvg viewBox='0 0 256 256' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.9' numOctaves='4' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)' opacity='0.03'/%3E%3C/svg%3E");
+  pointer-events: none; z-index: 9999; opacity: 0.4;
+}
+
+html { scroll-behavior: smooth; }
+
+/* ── Keyframe Helpers ──────────────────────────────────────── */
+@keyframes pulse-glow {
+  0%, 100% { box-shadow: 0 0 5px var(--accent-glow); }
+  50% { box-shadow: 0 0 20px var(--accent-glow-strong), 0 0 40px var(--accent-glow); }
+}
+@keyframes border-flow {
+  0% { border-color: var(--accent); }
+  33% { border-color: var(--secondary); }
+  66% { border-color: var(--accent-dim); }
+  100% { border-color: var(--accent); }
+}
+.animate-pulse-glow { animation: pulse-glow 2s ease-in-out infinite; }
+.animate-border-flow { animation: border-flow 4s ease-in-out infinite; }

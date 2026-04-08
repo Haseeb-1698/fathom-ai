@@ -1,0 +1,55 @@
+# Fathom backend dependencies
+# Install: pip install -r requirements.txt
+
+# ── Core ──────────────────────────────────────────────────────
+fastapi>=0.104.0
+uvicorn[standard]>=0.24.0
+pydantic>=2.0
+
+# ── ML / LLM ─────────────────────────────────────────────────
+torch>=2.1.0
+transformers>=4.40.0
+peft>=0.10.0
+bitsandbytes>=0.43.0
+accelerate>=0.28.0
+sentence-transformers>=2.3.0
+datasets>=2.16.0
+
+# ── RAG ───────────────────────────────────────────────────────
+faiss-cpu>=1.7.4         # use faiss-gpu on RunPod
+
+# ── Graph ─────────────────────────────────────────────────────
+neo4j>=5.14.0
+
+# ── Agent ─────────────────────────────────────────────────────
+pydantic-ai>=0.0.14      # token usage tracking (RunUsage, UsageLimits)
+
+# LangChain — ReAct agent pipeline with 5 specialist tools
+langchain>=0.2.0
+langchain-core>=0.2.0
+langchain-openai>=0.1.0  # AzureChatOpenAI for Kimi-K2.5
+
+# Langfuse — LLM observability: traces, token usage, latency per phase
+langfuse>=2.0.0
+
+# ── Utilities ─────────────────────────────────────────────────
+requests
+tqdm
+huggingface_hub>=0.20.0
+orjson>=3.9.0
+
+# ── Storage ───────────────────────────────────────────────────
+minio>=7.2.0              # MinIO S3-compatible object storage
+
+# ── Audit logging ─────────────────────────────────────────────
+structlog>=24.1.0         # structured JSON audit logs
+
+# ── API hardening ─────────────────────────────────────────────
+slowapi>=0.1.9           # rate limiting
+prometheus-client>=0.19.0  # /metrics endpoint (optional)
+
+# ── Testing ───────────────────────────────────────────────────
+pytest>=7.4.0
+pytest-asyncio>=0.23.0
+httpx>=0.26.0            # TestClient async support
+hypothesis>=6.100.0      # property-based tests

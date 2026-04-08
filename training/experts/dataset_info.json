@@ -1,0 +1,72 @@
+{
+  "fathom_unified_v2": {
+    "file_name": "/workspace/fathom/data/processed/v2_unified_augmented.jsonl",
+    "formatting": "alpaca",
+    "columns": { "prompt": "instruction", "query": "input", "response": "output" }
+  },
+  "fathom_e1_static": {
+    "file_name": "/workspace/fathom/data/experts/e1_static.jsonl",
+    "formatting": "alpaca",
+    "columns": { "prompt": "instruction", "query": "input", "response": "output" }
+  },
+  "fathom_e2_dynamic": {
+    "file_name": "/workspace/fathom/data/experts/cape_hf_reports.jsonl",
+    "formatting": "alpaca",
+    "columns": { "prompt": "instruction", "query": "input", "response": "output" }
+  },
+  "fathom_e3_network": {
+    "file_name": "/workspace/fathom/data/experts/e3_network.jsonl",
+    "formatting": "alpaca",
+    "columns": { "prompt": "instruction", "query": "input", "response": "output" }
+  },
+  "fathom_e4_forensics": {
+    "file_name": "/workspace/fathom/data/experts/e4_forensics.jsonl",
+    "formatting": "alpaca",
+    "columns": { "prompt": "instruction", "query": "input", "response": "output" }
+  },
+  "fathom_e4_joe": {
+    "file_name": "/workspace/fathom/data/experts/joe_sandbox_training.jsonl",
+    "formatting": "alpaca",
+    "columns": { "prompt": "instruction", "query": "input", "response": "output" }
+  },
+  "fathom_e5_threatintel_aug": {
+    "file_name": "/workspace/fathom/data/experts/e5_threatintel_aug.jsonl",
+    "formatting": "alpaca",
+    "columns": { "prompt": "instruction", "query": "input", "response": "output" }
+  },
+  "fathom_e6_detection": {
+    "file_name": "/workspace/fathom/data/experts/e6_detection.jsonl",
+    "formatting": "alpaca",
+    "columns": { "prompt": "instruction", "query": "input", "response": "output" }
+  },
+  "fathom_e7_reports": {
+    "file_name": "/workspace/fathom/data/experts/e7_reports.jsonl",
+    "formatting": "alpaca",
+    "columns": { "prompt": "instruction", "query": "input", "response": "output" }
+  },
+  "fathom_e8_analyst": {
+    "file_name": "/workspace/fathom/data/experts/e8_analyst.jsonl",
+    "formatting": "alpaca",
+    "columns": { "prompt": "instruction", "query": "input", "response": "output" }
+  },
+  "fathom_cti": {
+    "file_name": "/workspace/fathom/data/experts/cti_supplement.jsonl",
+    "formatting": "alpaca",
+    "columns": { "prompt": "instruction", "query": "input", "response": "output" }
+  },
+  "fathom_joe_cot": {
+    "file_name": "/workspace/fathom/data/experts/joe_cot_reasoning.jsonl",
+    "formatting": "alpaca",
+    "columns": { "prompt": "instruction", "query": "input", "response": "output" }
+  },
+  "fathom_blog_cot": {
+    "file_name": "/workspace/fathom/data/experts/blog_cot_training.jsonl",
+    "formatting": "alpaca",
+    "columns": { "prompt": "instruction", "query": "input", "response": "output" }
+  },
+  "fathom_cot_supplement": {
+    "file_name": "/workspace/fathom/data/experts/cot_supplement_fixed.jsonl",
+    "formatting": "alpaca",
+    "columns": { "prompt": "instruction", "query": "input", "response": "output" }
+  }
+}

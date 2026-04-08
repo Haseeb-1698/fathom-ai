@@ -1,0 +1,1 @@
+.ti-copy{display:flex;flex-direction:row-reverse;align-items:flex-start}.ti-copy__tooltip{display:inline-flex;vertical-align:middle}.ti-copy__icon{display:flex;font-size:0}.ti-copy.ti-copy--hovered .ti-copy__icon{opacity:0}.ti-copy.ti-copy--hovered:hover .ti-copy__icon{opacity:1}.ti-copy__text{padding-left:4px}.ti-copy__text:hover{color:#fff;cursor:default}

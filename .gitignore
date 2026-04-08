@@ -1,0 +1,87 @@
+# Dependencies
+node_modules/
+__pycache__/
+*.pyc
+*.pyo
+.pyo
+.eggs/
+*.egg-info/
+*.egg
+dist/
+build/
+.venv/
+venv/
+ENV/
+env/
+
+# IDE
+.idea/
+.vscode/
+*.swp
+*.swo
+*~
+
+# OS
+.DS_Store
+Thumbs.db
+Desktop.ini
+
+# Project-specific exclusions
+model_vm_backup*/
+.joe sandbox/
+.kiro/
+.raindrop-code/
+*.log
+*.bak
+
+# Sensitive files with API keys/tokens
+live_deploy.md
+fathom_demo/
+scripts/run_cape_fix.py
+scripts/run_topup.sh
+scripts/topup_experts.py
+scripts/topup_experts_v2.py
+backend/scripts/vm_setup_infra.sh
+backend/scripts/neo4j_init.py
+training/train_expert.py
+training/train_fresh_all.sh
+
+# Environment & secrets
+.env
+.env.local
+.env.*.local
+*.pem
+*.key
+secrets/
+
+# Cache & temp
+.cache/
+.pytest_cache/
+.mypy_cache/
+.ruff_cache/
+*.tmp
+*.temp
+
+# Build outputs
+.next/
+out/
+*.tsbuildinfo
+
+# Database & data (user-generated)
+data/
+neo4j-data/
+*.db
+*.sqlite
+
+# Jupyter
+.ipynb_checkpoints/
+
+# Coverage
+htmlcov/
+.coverage
+.coverage.*
+coverage.xml
+*.cover
+
+# Package locks (keep package-lock.json for reproducibility)
+# package-lock.json

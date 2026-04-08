@@ -1,0 +1,45 @@
+### LlamaFactory config — E1: Static Analysis Expert (STRETCH)
+### Usage: llamafactory-cli train experts/e1_static.yaml
+
+model_name_or_path: mistralai/Mixtral-8x7B-Instruct-v0.1
+dataset: fathom_e1_static
+dataset_dir: /workspace/fathom/training/experts
+template: alpaca
+
+# LoRA configuration
+finetuning_type: lora
+lora_target: q_proj,v_proj,k_proj,o_proj
+lora_rank: 32
+lora_alpha: 64
+lora_dropout: 0.0
+
+# Quantization
+quantization_bit: 4
+quantization_method: bitsandbytes
+
+# Training hyperparameters
+per_device_train_batch_size: 2
+per_device_eval_batch_size: 2
+gradient_accumulation_steps: 8
+learning_rate: 1.0e-4
+num_train_epochs: 3
+max_grad_norm: 1.0
+lr_scheduler_type: cosine
+warmup_steps: 100
+
+# Sequence
+cutoff_len: 2048
+
+# Logging & saving
+logging_steps: 10
+save_steps: 500
+eval_steps: 500
+save_total_limit: 3
+
+# Performance
+flash_attn: fa2
+bf16: true
+
+# Output
+output_dir: /workspace/checkpoints/expert-e1-static
+overwrite_output_dir: true
