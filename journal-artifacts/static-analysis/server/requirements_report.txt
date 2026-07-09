@@ -1,0 +1,2 @@
+# Additional requirements for PDF report generation
+reportlab>=4.0.0

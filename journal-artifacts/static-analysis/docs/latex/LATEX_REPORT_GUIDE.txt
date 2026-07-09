@@ -1,0 +1,259 @@
+================================================================================
+                    LATEX REPORT INTEGRATION GUIDE
+                    Unit Testing Section
+================================================================================
+
+FILES CREATED FOR YOUR LATEX REPORT
+================================================================================
+
+1. LATEX_UNIT_TESTING_SECTION.tex
+   - Full detailed section (~3-4 pages)
+   - Includes: Overview, results, analysis, recommendations
+   - Use this for: Comprehensive reports, thesis, detailed documentation
+
+2. LATEX_UNIT_TESTING_SHORT.tex
+   - Concise version (~1 page)
+   - Includes: Summary table, key findings, conclusion
+   - Use this for: Brief reports, presentations, executive summaries
+
+3. LATEX_TABLES_AND_FIGURES.tex
+   - Additional tables and figures
+   - Includes: 5 detailed tables, 1 figure, 1 code listing
+   - Use this for: Supplementary material, appendices
+
+================================================================================
+HOW TO USE IN YOUR LATEX DOCUMENT
+================================================================================
+
+OPTION 1: Include Full Section
+-------------------------------
+In your main .tex file:
+
+\input{LATEX_UNIT_TESTING_SECTION.tex}
+
+This will add the complete unit testing section with all subsections.
+
+
+OPTION 2: Include Short Version
+--------------------------------
+In your main .tex file:
+
+\input{LATEX_UNIT_TESTING_SHORT.tex}
+
+This will add a concise 1-page summary.
+
+
+OPTION 3: Mix and Match
+------------------------
+You can include specific tables from LATEX_TABLES_AND_FIGURES.tex:
+
+% In your document:
+\section{Unit Testing}
+Your custom text here...
+
+% Include specific table:
+\input{LATEX_TABLES_AND_FIGURES.tex}  % Or copy specific tables
+
+================================================================================
+REQUIRED LATEX PACKAGES
+================================================================================
+
+Add these to your preamble:
+
+\usepackage{booktabs}      % For professional tables
+\usepackage{multirow}      % For complex tables
+\usepackage{graphicx}      % For figures
+\usepackage{tikz}          % For charts (optional)
+\usepackage{pgfplots}      % For inline charts (optional)
+\usepackage{listings}      % For code listings (optional)
+
+% For code syntax highlighting (optional):
+\lstset{
+    basicstyle=\small\ttfamily,
+    breaklines=true,
+    frame=single,
+    numbers=left,
+    numberstyle=\tiny,
+    captionpos=b
+}
+
+================================================================================
+CUSTOMIZATION OPTIONS
+================================================================================
+
+1. ADJUST TABLE WIDTHS
+   - Change \begin{tabular}{|l|c|c|} to adjust column widths
+   - Use p{width} for fixed-width columns: {|l|p{5cm}|c|}
+
+2. CHANGE TABLE POSITION
+   - [h] = here
+   - [t] = top of page
+   - [b] = bottom of page
+   - [H] = exactly here (requires \usepackage{float})
+
+3. MODIFY CAPTIONS
+   - Edit \caption{...} text
+   - Change \label{...} for cross-references
+
+4. ADJUST SPACING
+   - Add \vspace{1cm} between sections
+   - Use \clearpage to force page break
+
+================================================================================
+CROSS-REFERENCING
+================================================================================
+
+Tables and figures have labels you can reference:
+
+In text:
+"As shown in Table~\ref{tab:test_modules}, the detector utilities..."
+"Figure~\ref{fig:test_pass_rates} illustrates the pass rates..."
+
+Available labels:
+- \ref{tab:test_modules}
+- \ref{tab:test_results}
+- \ref{tab:detailed_test_results}
+- \ref{tab:coverage_by_category}
+- \ref{tab:performance_metrics}
+- \ref{tab:test_types}
+- \ref{tab:industry_comparison}
+- \ref{fig:test_pass_rates}
+- \ref{lst:example_test}
+
+================================================================================
+COMPILATION TIPS
+================================================================================
+
+1. Compile twice to resolve references:
+   pdflatex your_report.tex
+   pdflatex your_report.tex
+
+2. If using bibliography:
+   pdflatex your_report.tex
+   bibtex your_report
+   pdflatex your_report.tex
+   pdflatex your_report.tex
+
+3. For tikz/pgfplots figures, you may need:
+   pdflatex -shell-escape your_report.tex
+
+================================================================================
+EXAMPLE INTEGRATION
+================================================================================
+
+% In your main report.tex:
+
+\documentclass[12pt]{article}
+\usepackage{booktabs}
+\usepackage{graphicx}
+\usepackage{tikz}
+\usepackage{pgfplots}
+
+\begin{document}
+
+\title{Fathom: Static Analysis System}
+\author{Your Name}
+\maketitle
+
+\tableofcontents
+\newpage
+
+% ... other sections ...
+
+% Add unit testing section
+\input{LATEX_UNIT_TESTING_SECTION.tex}
+
+% ... more sections ...
+
+\end{document}
+
+================================================================================
+ALTERNATIVE: COPY-PASTE APPROACH
+================================================================================
+
+If you prefer not to use \input{}, you can:
+
+1. Open LATEX_UNIT_TESTING_SECTION.tex
+2. Copy the content
+3. Paste directly into your main document
+4. Adjust formatting as needed
+
+This gives you more control but requires manual updates if you regenerate.
+
+================================================================================
+FORMATTING RECOMMENDATIONS
+================================================================================
+
+1. For thesis/dissertation:
+   - Use LATEX_UNIT_TESTING_SECTION.tex (full version)
+   - Include all tables from LATEX_TABLES_AND_FIGURES.tex
+   - Add the code listing example
+
+2. For conference paper:
+   - Use LATEX_UNIT_TESTING_SHORT.tex
+   - Include only Table 1 (summary)
+   - Reference detailed results in appendix
+
+3. For technical report:
+   - Use LATEX_UNIT_TESTING_SECTION.tex
+   - Include Tables 1, 2, and 3
+   - Add performance metrics
+
+4. For presentation slides (Beamer):
+   - Extract key numbers from tables
+   - Use the bar chart figure
+   - Focus on pass rates and key findings
+
+================================================================================
+TROUBLESHOOTING
+================================================================================
+
+Problem: Table too wide
+Solution: Use \small or \footnotesize before table
+         \begin{table}[h]
+         \small
+         \centering
+         ...
+
+Problem: Figure not showing
+Solution: Check file path, ensure graphicx package loaded
+         Use \graphicspath{{./figures/}} if needed
+
+Problem: References not working
+Solution: Compile twice, check label names match
+
+Problem: Code listing not formatted
+Solution: Ensure listings package loaded
+         Check lstset configuration
+
+================================================================================
+QUICK START CHECKLIST
+================================================================================
+
+□ Copy .tex files to your project directory
+□ Add required packages to preamble
+□ Choose full or short version
+□ Add \input{...} command in your document
+□ Compile twice to resolve references
+□ Check tables render correctly
+□ Adjust spacing/formatting as needed
+□ Update cross-references in your text
+□ Proofread section
+□ Final compilation
+
+================================================================================
+CONTACT & SUPPORT
+================================================================================
+
+If you need to regenerate or modify the LaTeX content:
+- Edit the .tex files directly
+- Adjust table data as needed
+- Modify captions and labels
+- Update numbers if you re-run tests
+
+All content is standard LaTeX and should work with any modern LaTeX distribution
+(TeX Live, MiKTeX, etc.).
+
+================================================================================
+                            END OF GUIDE
+================================================================================

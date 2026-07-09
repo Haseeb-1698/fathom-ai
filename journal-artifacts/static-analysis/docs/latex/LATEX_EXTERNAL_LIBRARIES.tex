@@ -1,0 +1,66 @@
+\subsection{External Libraries and Dependencies}
+
+The Fathom system integrates several external libraries and SDKs to provide comprehensive file analysis capabilities. These dependencies are organized into backend (Python) and frontend (JavaScript/React) components.
+
+\subsubsection{Backend Dependencies (Python)}
+
+\textbf{Core Framework:}
+\begin{itemize}
+    \item \textbf{FastAPI} -- Modern web framework for building the REST API server with automatic OpenAPI documentation
+    \item \textbf{Uvicorn} -- ASGI server for running the FastAPI application
+\end{itemize}
+
+\textbf{Malware Detection:}
+\begin{itemize}
+    \item \textbf{yara-python} -- Python bindings for YARA pattern matching engine, enabling rule-based malware detection with 1,378+ compiled rules
+\end{itemize}
+
+\textbf{File Analysis Libraries:}
+\begin{itemize}
+    \item \textbf{pefile} -- PE (Portable Executable) file parser for analyzing Windows executables and DLLs
+    \item \textbf{LIEF} -- Library to Instrument Executable Formats for advanced binary analysis
+    \item \textbf{PyMuPDF (fitz)} -- PDF manipulation and content extraction library
+    \item \textbf{pdfminer.six} -- PDF text extraction and structure analysis
+    \item \textbf{oletools} -- Microsoft Office OLE format analysis and macro extraction
+    \item \textbf{python-docx} -- OOXML document parsing for modern Office formats
+    \item \textbf{openpyxl} -- Excel XLSX file manipulation
+\end{itemize}
+
+\textbf{Security Analysis:}
+\begin{itemize}
+    \item \textbf{Capstone} -- Disassembly framework for analyzing executable code sections
+    \item \textbf{SciPy} -- Scientific computing library used for entropy calculations
+\end{itemize}
+
+\textbf{Report Generation:}
+\begin{itemize}
+    \item \textbf{ReportLab} -- PDF generation library for creating analysis reports
+\end{itemize}
+
+\subsubsection{Frontend Dependencies (JavaScript/React)}
+
+\textbf{Core Framework:}
+\begin{itemize}
+    \item \textbf{React 19.1.1} -- Component-based UI library for building the dashboard interface
+    \item \textbf{React DOM 19.1.1} -- React rendering for web browsers
+    \item \textbf{Vite 7.1.7} -- Fast build tool and development server
+\end{itemize}
+
+\textbf{UI Components and Utilities:}
+\begin{itemize}
+    \item \textbf{Axios 1.12.2} -- HTTP client for API communication
+    \item \textbf{react-dropzone 14.3.8} -- Drag-and-drop file upload component
+\end{itemize}
+
+\textbf{Development Tools:}
+\begin{itemize}
+    \item \textbf{ESLint 9.36.0} -- JavaScript linting and code quality enforcement
+    \item \textbf{@vitejs/plugin-react 5.0.4} -- Vite plugin for React support
+    \item \textbf{TypeScript types} -- Type definitions for React development
+\end{itemize}
+
+\subsubsection{Dependency Management}
+
+The system employs a modular dependency architecture with graceful fallbacks. Enhanced analysis features are optional -- if specialized libraries (e.g., PyMuPDF, oletools) are unavailable, the system falls back to basic analysis capabilities. This design ensures the core detection engine remains functional even with minimal dependencies installed.
+
+Critical dependencies like FastAPI, yara-python, and React are required for basic operation, while enhanced analysis libraries provide additional capabilities when available. The system reports library availability through the \texttt{/api/status} endpoint, allowing administrators to verify which analysis features are enabled.
