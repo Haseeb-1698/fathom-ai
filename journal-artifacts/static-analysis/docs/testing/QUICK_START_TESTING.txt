@@ -1,0 +1,109 @@
+================================================================================
+                        QUICK START - TESTING GUIDE
+================================================================================
+
+CURRENT STATUS
+--------------
+Coverage: 25% (1,296/5,218 lines)
+Tests: 21 passed, 15 failed, 21 errors, 29 skipped
+
+
+IMMEDIATE FIXES (30 minutes)
+-----------------------------
+1. Fix TestClient compatibility:
+   pip install --upgrade starlette
+   OR
+   pip install httpx==0.23.0
+
+2. Install missing dependencies:
+   pip install oletools PyMuPDF reportlab
+
+3. Run tests again:
+   python -m pytest tests/ -v --cov=server --cov-report=term
+
+
+WHAT WAS ADDED
+--------------
+✅ tests/test_extractors.py (35 tests)
+   - Office macro extraction tests
+   - PDF content extraction tests
+   - Integration tests
+
+✅ tests/test_api_endpoints.py (21 tests)
+   - File upload tests
+   - Analysis endpoint tests
+   - Report generation tests
+   - Error handling tests
+
+✅ tests/test_report_generator.py (21 tests)
+   - Report generation tests
+   - Formatting tests
+   - Special character handling
+
+
+COVERAGE IMPROVEMENTS
+---------------------
+Component              Before  After  Change
+-------------------------------------------------
+Extractors             0%      15%    +15%
+Report Generator       0%      1%     +1%
+API Endpoints          17%     17%    (blocked)
+Detectors              37%     37%    (stable)
+-------------------------------------------------
+TOTAL                  23.4%   25%    +1.6%
+
+
+NEXT STEPS TO 70% COVERAGE
+---------------------------
+Week 1: Fix blocking issues → 35-40%
+Week 2-3: Add integration tests → 50-55%
+Week 4-5: Add frontend tests → 65-70%
+Week 6: Polish and optimize → 70%+
+
+
+RUN TESTS
+---------
+# All tests with coverage
+python -m pytest tests/ -v --cov=server --cov-report=term
+
+# Specific test file
+python -m pytest tests/test_extractors.py -v
+
+# With detailed output
+python -m pytest tests/ -v --tb=short
+
+# Generate HTML coverage report
+python -m pytest tests/ --cov=server --cov-report=html
+# Then open htmlcov/index.html
+
+
+VIEW REPORTS
+------------
+- Comprehensive report: COMPREHENSIVE_TEST_COVERAGE_REPORT.txt
+- Coverage JSON: coverage_new.json
+- This quick guide: QUICK_START_TESTING.txt
+
+
+TROUBLESHOOTING
+---------------
+Issue: TestClient errors
+Fix: pip install --upgrade starlette
+
+Issue: Tests skipped (missing dependencies)
+Fix: pip install oletools PyMuPDF reportlab
+
+Issue: Import errors
+Fix: Ensure you're in the project root directory
+
+Issue: Coverage not updating
+Fix: Delete .coverage file and run tests again
+
+
+CONTACT & SUPPORT
+-----------------
+For questions about the tests, refer to:
+- COMPREHENSIVE_TEST_COVERAGE_REPORT.txt (detailed analysis)
+- Individual test files for specific test documentation
+- pytest documentation: https://docs.pytest.org/
+
+================================================================================

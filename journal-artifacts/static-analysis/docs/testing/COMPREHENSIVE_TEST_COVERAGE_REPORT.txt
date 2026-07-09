@@ -1,0 +1,534 @@
+================================================================================
+                    COMPREHENSIVE TEST COVERAGE REPORT
+                         File Scan Security Project
+                          Generated: December 7, 2024
+================================================================================
+
+EXECUTIVE SUMMARY
+================================================================================
+
+OVERALL TEST COVERAGE: 25%
+- Covered Lines: 1,296 out of 5,218
+- Missing Lines: 3,922
+- Test Status: 21 passed, 15 failed, 21 errors, 29 skipped
+- Pass Rate: 36.8% (21 out of 57 runnable tests)
+
+COVERAGE IMPROVEMENT: +1.58% (from 23.42% to 25%)
+- New tests added: 56 test cases
+- Critical areas now tested: Extractors (13-17%), Report Generator (1%)
+
+
+================================================================================
+DETAILED COVERAGE BY COMPONENT
+================================================================================
+
+1. BACKEND API/SERVER - 17% Coverage
+--------------------------------------------------------------------------------
+File: server/app.py
+Coverage: 80/482 lines (17%)
+Missing: 402 lines
+Status: ⚠️ CRITICAL - Very Low Coverage
+
+Uncovered Endpoints:
+  ❌ File upload handling (0%)
+  ❌ PDF analysis endpoint (0%)
+  ❌ PE analysis endpoint (0%)
+  ❌ Office document analysis endpoint (0%)
+  ❌ Report generation endpoint (0%)
+  ❌ Report download endpoint (0%)
+  ❌ Macro extraction endpoints (0%)
+  ❌ PDF content extraction endpoints (0%)
+  ❌ System status endpoints (0%)
+
+Note: API endpoint tests created but blocked by TestClient compatibility issue
+
+
+2. DETECTORS - 37% Coverage (BEST PERFORMING)
+--------------------------------------------------------------------------------
+Total: 1,141/3,094 lines (37%)
+
+Breakdown by Module:
+  ✅ detector/yara_loader.py        61% (69/114)    - GOOD
+  ✅ detector/pe_full.py             58% (242/418)   - GOOD
+  ✅ detector/office_full.py         55% (302/545)   - GOOD
+  ⚠️ detector/pdf_full.py            46% (353/767)   - MODERATE
+  ⚠️ detector/entropy_utils.py       36% (16/45)     - LOW
+  ❌ detector/office_enhanced.py     16% (41/258)    - VERY LOW
+  ❌ detector/pdf_enhanced.py        15% (39/264)    - VERY LOW
+  ❌ detector/hardened.py            11% (78/683)    - VERY LOW
+  ✅ detector/__init__.py           100% (0/0)       - N/A
+
+Well-Tested Features:
+  ✅ PE header parsing
+  ✅ Section analysis
+  ✅ Import/export detection
+  ✅ OOXML structure parsing
+  ✅ Macro detection
+  ✅ OLE file handling
+  ✅ YARA rule loading and matching
+
+Gaps:
+  ❌ Advanced PDF analysis (85% uncovered)
+  ❌ Advanced Office analysis (84% uncovered)
+  ❌ Hardened detection logic (89% uncovered)
+  ❌ Entropy calculations (64% uncovered)
+
+
+3. EXTRACTORS - 13-17% Coverage (NEW TESTS ADDED)
+--------------------------------------------------------------------------------
+  ⚠️ pdf_extractor.py          17% (44/257)    - IMPROVED from 0%
+  ⚠️ office_extractor.py        13% (31/244)    - IMPROVED from 0%
+
+Total: 75/501 lines (15%)
+
+New Test Coverage:
+  ✅ 35 extractor tests created
+  ⚠️ 29 tests skipped (missing dependencies)
+  ❌ 6 tests failed (mocking issues)
+
+Tested Functions:
+  ⚠️ extract_vba_from_ooxml() - Partially tested
+  ⚠️ extract_vba_from_ole() - Partially tested
+  ⚠️ extract_metadata() - Partially tested
+  ⚠️ extract_javascript() - Partially tested
+  ⚠️ extract_embedded_files() - Partially tested
+  ⚠️ extract_images() - Partially tested
+  ⚠️ extract_fonts() - Partially tested
+
+Remaining Gaps:
+  ❌ Office macro extraction (87% uncovered)
+  ❌ PDF content extraction (83% uncovered)
+  ❌ Embedded file handling (85% uncovered)
+  ❌ JavaScript extraction (80% uncovered)
+
+
+4. REPORT GENERATOR - 1% Coverage (NEW TESTS ADDED)
+--------------------------------------------------------------------------------
+File: server/report_generator.py
+Coverage: 1/694 lines (1%)
+Missing: 693 lines
+Status: ❌ CRITICAL - Essentially Untested
+
+New Test Coverage:
+  ✅ 21 report generator tests created
+  ⚠️ 21 tests skipped (module import issues)
+
+Test Cases Created:
+  ⚠️ Report initialization
+  ⚠️ Custom styles creation
+  ⚠️ Basic report generation
+  ⚠️ High-risk file reports
+  ⚠️ Risk score formatting
+  ⚠️ Threats section formatting
+  ⚠️ Metadata section formatting
+  ⚠️ YARA matches formatting
+  ⚠️ Summary table creation
+  ⚠️ Header/footer addition
+  ⚠️ Special character handling
+  ⚠️ Unicode support
+  ⚠️ Multiple report generation
+
+Remaining Gaps:
+  ❌ PDF report creation (99% uncovered)
+  ❌ Data formatting (99% uncovered)
+  ❌ Chart generation (100% uncovered)
+  ❌ Template rendering (100% uncovered)
+
+
+5. FRONTEND (React Dashboard) - 0% Coverage
+--------------------------------------------------------------------------------
+Total Components: 20 JSX files
+Test Files: 0
+Coverage: 0%
+
+Untested Components:
+  ❌ App.jsx - Main application
+  ❌ BasicView.jsx - Basic analysis view
+  ❌ BugCompanion.jsx - Bug reporting
+  ❌ ExtractedContent.jsx - Content display
+  ❌ InteractiveEnhancer.jsx - Interactive features
+  ❌ InteractiveVisualizations.jsx - Data visualization
+  ❌ LoadingAnimation.jsx - Loading states
+  ❌ OfficeExtractor.jsx - Office extraction UI
+  ❌ PDFExtractor.jsx - PDF extraction UI
+  ❌ ReportGenerator.jsx - Report generation UI
+  ❌ StaticIndicatorsCard.jsx - Indicators display
+  ❌ StaticMiniSummary.jsx - Summary display
+  ❌ StaticView.jsx - Static analysis view
+  ❌ SystemStatus.jsx - System status display
+  ❌ UploadBox.jsx - File upload component
+  ❌ UploadPanel.jsx - Upload panel
+  ❌ YaraExplain.jsx - YARA explanation
+  ❌ YaraMatches.jsx - YARA matches display
+  ❌ And 2 more...
+
+Recommendation: Set up Jest + React Testing Library
+
+
+================================================================================
+TEST SUITE ANALYSIS
+================================================================================
+
+EXISTING TESTS (tests/ directory)
+--------------------------------------------------------------------------------
+1. test_file_analysis_engine.py
+   - Total: 11 tests
+   - Passed: 6
+   - Failed: 7 (mocking issues)
+   - Coverage: File type detection, analysis engine
+
+2. test_office_full.py
+   - Total: 5 tests
+   - Passed: 5 ✅
+   - Failed: 0
+   - Coverage: Office document analysis
+
+3. test_pdf_full.py
+   - Total: 7 tests
+   - Passed: 6
+   - Failed: 1 (JavaScript detection)
+   - Coverage: PDF analysis
+
+4. test_pe_full.py
+   - Total: 5 tests
+   - Passed: 4
+   - Failed: 1 (API endpoint)
+   - Coverage: PE file analysis
+
+5. test_extractors.py (NEW)
+   - Total: 14 tests
+   - Passed: 0
+   - Failed: 6
+   - Skipped: 8
+   - Coverage: Office and PDF extractors
+
+6. test_api_endpoints.py (NEW)
+   - Total: 21 tests
+   - Passed: 0
+   - Failed: 0
+   - Errors: 21 (TestClient compatibility)
+   - Coverage: API endpoints
+
+7. test_report_generator.py (NEW)
+   - Total: 21 tests
+   - Passed: 0
+   - Failed: 0
+   - Skipped: 21 (import issues)
+   - Coverage: Report generation
+
+
+ROOT-LEVEL TEST FILES (Not in test suite)
+--------------------------------------------------------------------------------
+- test_js_detection.py (0% coverage)
+- test_malicious_pdfs.py (0% coverage)
+- test_office_enhanced.py (0% coverage)
+- test_pdf_libraries.py (0% coverage)
+
+These files exist but are not integrated into the test suite.
+
+
+================================================================================
+WHAT'S COVERED (25%)
+================================================================================
+
+WELL-TESTED AREAS:
+--------------------------------------------------------------------------------
+1. PE File Analysis (58%)
+   ✅ PE header parsing
+   ✅ Section analysis
+   ✅ Import/export detection
+   ✅ Basic threat detection
+   ✅ Authenticode verification
+   ✅ String extraction
+
+2. Office Document Analysis (55%)
+   ✅ OOXML structure parsing
+   ✅ Macro detection
+   ✅ OLE file handling
+   ✅ Basic metadata extraction
+   ✅ External link detection
+   ✅ Embedded object detection
+
+3. YARA Rule Loading (61%)
+   ✅ Rule compilation
+   ✅ Rule matching
+   ✅ Error handling
+   ✅ Rule directory scanning
+
+4. PDF Analysis (46%)
+   ✅ Basic PDF parsing
+   ✅ Incremental updates detection
+   ✅ Stream decompression
+   ✅ Entropy analysis
+   ✅ String extraction
+
+
+================================================================================
+WHAT'S NOT COVERED (75%)
+================================================================================
+
+CRITICAL GAPS:
+--------------------------------------------------------------------------------
+
+1. API ENDPOINTS (83% uncovered)
+   ❌ File upload handling
+   ❌ All analysis endpoints
+   ❌ Report generation
+   ❌ File extraction
+   ❌ Error handling
+   ❌ Authentication/authorization
+
+2. CONTENT EXTRACTORS (85% uncovered)
+   ❌ Office macro extraction
+   ❌ PDF content extraction
+   ❌ Embedded file extraction
+   ❌ JavaScript extraction
+   ❌ Metadata extraction
+
+3. REPORT GENERATION (99% uncovered)
+   ❌ PDF report creation
+   ❌ Data formatting
+   ❌ Chart generation
+   ❌ Template rendering
+
+4. FRONTEND (100% uncovered)
+   ❌ All React components
+   ❌ User interactions
+   ❌ API integration
+   ❌ State management
+   ❌ Error handling
+   ❌ UI/UX flows
+
+5. ENHANCED DETECTORS (85-89% uncovered)
+   ❌ Advanced PDF analysis
+   ❌ Advanced Office analysis
+   ❌ Hardened detection logic
+   ❌ Entropy calculations
+
+6. INTEGRATION TESTING (100% uncovered)
+   ❌ End-to-end workflows
+   ❌ File upload → analysis → report generation
+   ❌ Multi-file processing
+   ❌ Error recovery
+
+
+================================================================================
+TEST FAILURES & ISSUES
+================================================================================
+
+BLOCKING ISSUES:
+--------------------------------------------------------------------------------
+1. TestClient Compatibility (21 errors)
+   Issue: TypeError: Client.__init__() got an unexpected keyword argument 'app'
+   Impact: All API endpoint tests blocked
+   Cause: Starlette/httpx version mismatch
+   Fix: Upgrade starlette or downgrade httpx
+
+2. Module Import Issues (29 skipped tests)
+   Issue: Missing dependencies (oletools, PyMuPDF, reportlab)
+   Impact: Extractor and report generator tests skipped
+   Fix: Install missing dependencies
+
+3. Mocking Issues (7 failures)
+   Issue: Mock objects not properly configured
+   Impact: File analysis engine tests failing
+   Fix: Improve mock setup in test_file_analysis_engine.py
+
+4. JavaScript Detection (1 failure)
+   Issue: PDF JavaScript objects not detected
+   Impact: test_openaction_js failing
+   Fix: Improve PDF JavaScript extraction logic
+
+
+================================================================================
+RECOMMENDATIONS
+================================================================================
+
+PRIORITY 1 - IMMEDIATE (This Week)
+--------------------------------------------------------------------------------
+1. Fix TestClient Compatibility
+   - Upgrade starlette: pip install --upgrade starlette
+   - Or downgrade httpx: pip install httpx==0.23.0
+   - Estimated time: 30 minutes
+   - Impact: Unblocks 21 API tests
+
+2. Install Missing Dependencies
+   - pip install oletools PyMuPDF reportlab
+   - Estimated time: 15 minutes
+   - Impact: Unblocks 50 tests
+
+3. Fix Mocking Issues
+   - Update test_file_analysis_engine.py mocks
+   - Estimated time: 2 hours
+   - Impact: Fixes 7 failing tests
+
+Expected Coverage After Priority 1: 35-40%
+
+
+PRIORITY 2 - HIGH (Next Week)
+--------------------------------------------------------------------------------
+4. Add Integration Tests
+   - End-to-end workflow tests
+   - Multi-file processing tests
+   - Estimated time: 3 days
+   - Impact: +10% coverage
+
+5. Improve Extractor Tests
+   - Add real file tests
+   - Test error handling
+   - Estimated time: 2 days
+   - Impact: +5% coverage
+
+6. Add Report Generator Tests
+   - Test PDF generation
+   - Test all formatting functions
+   - Estimated time: 2 days
+   - Impact: +3% coverage
+
+Expected Coverage After Priority 2: 50-55%
+
+
+PRIORITY 3 - MEDIUM (Next 2 Weeks)
+--------------------------------------------------------------------------------
+7. Add Frontend Tests
+   - Set up Jest + React Testing Library
+   - Test critical user flows
+   - Test component rendering
+   - Estimated time: 5 days
+   - Impact: +15% coverage
+
+8. Improve Detector Coverage
+   - Test enhanced detection modules
+   - Test hardened detection logic
+   - Estimated time: 3 days
+   - Impact: +5% coverage
+
+Expected Coverage After Priority 3: 70%+
+
+
+================================================================================
+TIMELINE TO 70% COVERAGE
+================================================================================
+
+Phase 1: Fix Blocking Issues (Week 1)
+--------------------------------------
+- Fix TestClient compatibility
+- Install dependencies
+- Fix mocking issues
+Target: 35-40% coverage
+Effort: 1 week
+
+Phase 2: Critical Backend Tests (Weeks 2-3)
+--------------------------------------------
+- Integration tests
+- Extractor tests
+- Report generator tests
+Target: 50-55% coverage
+Effort: 2 weeks
+
+Phase 3: Frontend Setup (Weeks 4-5)
+------------------------------------
+- Set up Jest + React Testing Library
+- Test critical components
+- Test user flows
+Target: 65-70% coverage
+Effort: 2 weeks
+
+Phase 4: Polish & Optimization (Week 6)
+----------------------------------------
+- Fix remaining failures
+- Improve detector coverage
+- Add edge case tests
+Target: 70%+ coverage
+Effort: 1 week
+
+TOTAL TIMELINE: 6 weeks
+TOTAL EFFORT: ~30 working days
+
+
+================================================================================
+RISK ASSESSMENT
+================================================================================
+
+HIGH RISK AREAS (Untested):
+--------------------------------------------------------------------------------
+❌ File upload and validation
+❌ Content extraction (macros, JavaScript)
+❌ Report generation
+❌ All frontend functionality
+❌ Error handling and recovery
+❌ Multi-file processing
+❌ Concurrent request handling
+
+MEDIUM RISK AREAS (Partially Tested):
+--------------------------------------------------------------------------------
+⚠️ PDF analysis (46% covered)
+⚠️ API endpoints (17% covered)
+⚠️ Enhanced detectors (15% covered)
+⚠️ Extractors (15% covered)
+
+LOW RISK AREAS (Well Tested):
+--------------------------------------------------------------------------------
+✅ PE file analysis (58% covered)
+✅ Office document analysis (55% covered)
+✅ YARA rule loading (61% covered)
+
+
+================================================================================
+PRODUCTION READINESS
+================================================================================
+
+CURRENT STATUS: ⚠️ NOT PRODUCTION-READY
+
+Reasons:
+1. Only 25% test coverage (industry standard: 70-80%)
+2. Critical functionality untested (extractors, report generation)
+3. No frontend tests
+4. API endpoints barely tested
+5. No integration tests
+6. 36.8% test pass rate (should be >95%)
+
+MINIMUM REQUIREMENTS FOR PRODUCTION:
+- 70% overall test coverage
+- 90% coverage for critical paths
+- 95%+ test pass rate
+- Integration tests for all workflows
+- Frontend tests for critical user flows
+- Load testing
+- Security testing
+
+ESTIMATED TIME TO PRODUCTION-READY: 6-8 weeks
+
+
+================================================================================
+CONCLUSION
+================================================================================
+
+The project has made progress with 25% test coverage (up from 23.42%), but
+significant work remains to reach production-ready status.
+
+KEY ACHIEVEMENTS:
+✅ Added 56 new test cases
+✅ Improved extractor coverage from 0% to 15%
+✅ Created comprehensive test framework
+✅ Identified all critical gaps
+
+KEY CHALLENGES:
+❌ 75% of code still untested
+❌ Multiple blocking issues (TestClient, dependencies)
+❌ No frontend tests
+❌ Low test pass rate (36.8%)
+
+IMMEDIATE NEXT STEPS:
+1. Fix TestClient compatibility (30 min)
+2. Install missing dependencies (15 min)
+3. Fix mocking issues (2 hours)
+4. Run tests again to verify improvements
+
+With focused effort over the next 6 weeks, the project can reach 70%+ coverage
+and be production-ready. The test infrastructure is now in place; it's a matter
+of fixing blocking issues and expanding test coverage systematically.
+
+================================================================================
+                              END OF REPORT
+================================================================================

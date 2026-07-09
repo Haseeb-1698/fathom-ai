@@ -1,0 +1,238 @@
+diff --git a/analyzer/windows/lib/common/abstracts.py b/analyzer/windows/lib/common/abstracts.py
+index 595ec6d2..5e9bd143 100644
+--- a/analyzer/windows/lib/common/abstracts.py
++++ b/analyzer/windows/lib/common/abstracts.py
+@@ -273,7 +273,7 @@ class Package:
+             args = f'-NoProfile -ExecutionPolicy bypass -File "{file_path}"'
+             return self.execute(powershell, args, file_path)
+         # File extensions that require winword.exe/wordview.exe to run
+-        elif file_name.lower().endswith(".doc"):
++        elif file_name.lower().endswith((".doc", ".docm", ".docx", ".rtf")):
+             # Try getting winword or wordview as a backup
+             try:
+                 word = self.get_path_glob("WINWORD.EXE")
+@@ -281,7 +281,7 @@ class Package:
+                 word = self.get_path_glob("WORDVIEW.EXE")
+             return self.execute(word, f'"{file_path}" /q', file_path)
+         # File extensions that require excel.exe to run
+-        elif file_name.lower().endswith(".xls"):
++        elif file_name.lower().endswith((".xls", ".xlsm", ".xlsx", ".xltm", ".xltx")):
+             # Try getting excel
+             excel = self.get_path_glob("EXCEL.EXE")
+             return self.execute(excel, f'"{file_path}" /q', file_path)
+diff --git a/analyzer/windows/modules/packages/pdf.py b/analyzer/windows/modules/packages/pdf.py
+index f4d9780f..37eb92db 100644
+--- a/analyzer/windows/modules/packages/pdf.py
++++ b/analyzer/windows/modules/packages/pdf.py
+@@ -12,9 +12,13 @@ class PDF(Package):
+     PATHS = [
+         ("ProgramFiles", "Adobe", "*a*", "Reader", "AcroRd32.exe"),
+         ("ProgramFiles", "Adobe", "Acrobat DC", "Acrobat", "Acrobat.exe"),
++        ("ProgramFiles", "Microsoft", "Edge", "Application", "msedge.exe"),
++        ("ProgramFiles", "Google", "Chrome", "Application", "chrome.exe"),
++        ("LOCALAPPDATA", "Chromium", "Application", "chrome.exe"),
+     ]
+-    summary = "Opens .pdf file with Adobe Reader / Acrobat."
++    summary = "Opens .pdf file with Adobe Reader / Acrobat, falling back to a browser if needed."
+     description = """Uses AcroRd32.exe or Acrobat.exe to open a PDF file.
++    Falls back to Edge or Chrome if Adobe Reader is not installed.
+     The 'pdf' option is set automatically."""
+ 
+     def __init__(self, options=None, config=None):
+@@ -30,6 +34,12 @@ class PDF(Package):
+         try:
+             reader = self.get_path_glob("AcroRd32.exe")
+         except CuckooPackageError:
+-            reader = self.get_path_glob("Acrobat.exe")
++            try:
++                reader = self.get_path_glob("Acrobat.exe")
++            except CuckooPackageError:
++                try:
++                    reader = self.get_path("msedge.exe")
++                except CuckooPackageError:
++                    reader = self.get_path("chrome.exe")
+ 
+         return self.execute(reader, f'"{path}"', path)
+diff --git a/conf/default/reporting.conf.default b/conf/default/reporting.conf.default
+index 9dcd41fa..0ce91297 100644
+--- a/conf/default/reporting.conf.default
++++ b/conf/default/reporting.conf.default
+@@ -51,6 +51,14 @@ indent = 4
+ encoding = latin-1
+ store_compressed = no
+ 
++[kspnreport]
++enabled = no
++html = yes
++json_summary = yes
++all_artifacts = no
++analyst =
++org = KSPN
++
+ # Community
+ [reporthtml]
+ # Standalone report, not requires CAPE webgui
+diff --git a/lib/cuckoo/common/demux.py b/lib/cuckoo/common/demux.py
+index 19fb110c..fadab627 100644
+--- a/lib/cuckoo/common/demux.py
++++ b/lib/cuckoo/common/demux.py
+@@ -122,6 +122,68 @@ OFFICE_TYPES = [
+     "Microsoft OOXML",
+ ]
+ 
++DIRECT_CHILD_EXTENSIONS = {
++    ".accdr",
++    ".bat",
++    ".cmd",
++    ".com",
++    ".db",
++    ".dll",
++    ".doc",
++    ".docb",
++    ".docm",
++    ".docx",
++    ".dot",
++    ".dotm",
++    ".dotx",
++    ".exe",
++    ".hta",
++    ".htm",
++    ".html",
++    ".jar",
++    ".js",
++    ".jse",
++    ".lnk",
++    ".mht",
++    ".mso",
++    ".msi",
++    ".msix",
++    ".msixbundle",
++    ".one",
++    ".onetoc2",
++    ".pdf",
++    ".pl",
++    ".pot",
++    ".potm",
++    ".potx",
++    ".ppam",
++    ".pps",
++    ".ppsm",
++    ".ppsx",
++    ".ppt",
++    ".pptm",
++    ".pptx",
++    ".ps1",
++    ".pub",
++    ".scr",
++    ".sh",
++    ".sldm",
++    ".sldx",
++    ".vbe",
++    ".vbs",
++    ".wsf",
++    ".xla",
++    ".xlam",
++    ".xls",
++    ".xlsb",
++    ".xlsm",
++    ".xlsx",
++    ".xlt",
++    ".xltm",
++    ".xltx",
++    ".xlw",
++}
++
+ 
+ def options2passwd(options: str) -> str:
+     password = ""
+@@ -168,6 +230,25 @@ def is_valid_package(package: str) -> bool:
+     return any(ptype in package for ptype in VALID_PACKAGES)
+ 
+ 
++def _prefer_direct_child(child: sfFile) -> bool:
++    """Prefer the extracted child itself over its nested internals when it is a real launch target."""
++    filename = child.filename.decode(errors="ignore") if isinstance(child.filename, bytes) else child.filename
++    _, ext = os.path.splitext(filename)
++    ext = ext.lower()
++    if ext in DIRECT_CHILD_EXTENSIONS:
++        return True
++
++    package = (child.package or "").lower()
++    if package in VALID_PACKAGES:
++        return True
++
++    magic = child.magic or ""
++    if any(marker in magic for marker in OFFICE_TYPES):
++        return True
++
++    return False
++
++
+ # ToDo fix return type
+ def _sf_children(child: sfFile):  # -> bytes:
+     path_to_extract = ""
+@@ -218,7 +299,7 @@ def demux_sflock(filename: bytes, options: str, check_shellcode: bool = True):
+         if unpacked.package in blacklist_extensions:
+             return [], "blacklisted package"
+         for sf_child in unpacked.children:
+-            if sf_child.to_dict().get("children"):
++            if sf_child.to_dict().get("children") and not _prefer_direct_child(sf_child):
+                 for ch in sf_child.children:
+                     tmp_child = _sf_children(ch)
+                     # check if path is not empty
+diff --git a/lib/cuckoo/core/data/task.py b/lib/cuckoo/core/data/task.py
+index d04d2572..98ad5a1e 100644
+--- a/lib/cuckoo/core/data/task.py
++++ b/lib/cuckoo/core/data/task.py
+@@ -65,7 +65,7 @@ class Task(Base):
+     custom: Mapped[Optional[str]] = mapped_column(String(255), nullable=True)
+     machine: Mapped[Optional[str]] = mapped_column(String(255), nullable=True)
+     package: Mapped[Optional[str]] = mapped_column(String(255), nullable=True)
+-    route: Mapped[Optional[str]] = mapped_column(String(128), nullable=True, default=False)
++    route: Mapped[Optional[str]] = mapped_column(String(128), nullable=True, default=None)
+     # Task tags
+     tags_tasks: Mapped[Optional[str]] = mapped_column(String(256), nullable=True)
+     # Virtual machine tags
+diff --git a/tests/test_demux.py b/tests/test_demux.py
+index e24a9664..98c15c29 100644
+--- a/tests/test_demux.py
++++ b/tests/test_demux.py
+@@ -4,6 +4,7 @@
+ 
+ import pathlib
+ import tempfile
++from types import SimpleNamespace
+ 
+ import pytest
+ from tcr_misc import get_sample
+@@ -92,3 +93,30 @@ class TestDemux:
+     def test_options2passwd(self):
+         options = "password=foobar"
+         demux.options2passwd(options)
++
++    def test_prefer_direct_child_for_office_docm(self):
++        child = SimpleNamespace(
++            filename=b"invoice.docm",
++            package="",
++            magic="Microsoft OOXML",
++        )
++
++        assert demux._prefer_direct_child(child) is True
++
++    def test_prefer_direct_child_for_pdf(self):
++        child = SimpleNamespace(
++            filename=b"payload.pdf",
++            package="pdf",
++            magic="PDF document",
++        )
++
++        assert demux._prefer_direct_child(child) is True
++
++    def test_do_not_prefer_direct_child_for_embedded_office_blob(self):
++        child = SimpleNamespace(
++            filename=b"vbaProject.bin",
++            package="",
++            magic="data",
++        )
++
++        assert demux._prefer_direct_child(child) is False

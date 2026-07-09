@@ -83,5 +83,19 @@ htmlcov/
 coverage.xml
 *.cover
 
+# Journal artifact safety exclusions
+journal-artifacts/**/node_modules/
+journal-artifacts/**/dist/
+journal-artifacts/**/__pycache__/
+journal-artifacts/**/.pytest_cache/
+journal-artifacts/**/.venv/
+journal-artifacts/**/venv/
+journal-artifacts/**/out/
+journal-artifacts/**/quarantine/
+journal-artifacts/**/extracted_content/
+journal-artifacts/**/*.pyc
+journal-artifacts/**/*.pyo
+journal-artifacts/**/*.log
+
 # Package locks (keep package-lock.json for reproducibility)
 # package-lock.json
