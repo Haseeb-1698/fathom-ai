@@ -1,0 +1,108 @@
+{
+  "timestamp": "2026-07-15T18:18:31.890333",
+  "n": 3,
+  "mean": {
+    "exact": 0.886,
+    "parent": 0.861
+  },
+  "per_sample": [
+    {
+      "id": "12",
+      "family": "Emotet",
+      "metrics": {
+        "exact": {
+          "p": 0.8,
+          "r": 1.0,
+          "f1": 0.889
+        },
+        "parent": {
+          "p": 0.75,
+          "r": 1.0,
+          "f1": 0.857
+        },
+        "predicted": [
+          "T1012",
+          "T1055",
+          "T1071",
+          "T1071.004",
+          "T1083"
+        ],
+        "gt": [
+          "T1012",
+          "T1071",
+          "T1071.004",
+          "T1083"
+        ]
+      },
+      "output": "**1. Malware Family Identification:**\nBased on multiple sources including Yara rules and kspn validation with high confidence levels, this sample belongs to the Emotet family. The Yara rule matches specifically identify it as Emotet, while kspn provides additional confirmation with a confidence of 74%. This aligns with known characteristics such as process injection capabilities and outbound network communication patterns typical of Emotet variants.\n\n**2. MITRE ATT&CK Techniques Observed:**\n- T1055 (Process Injection): Confirmed through suspicious API calls like NtAllocateVirtualMemory, NtMapViewOfSection, and output debug strings indicating potential code injection attempts.\n- T1071 (Application Layer Protocol): Observed via outbound communications towards 20.42.65.91, which suggests data exfiltration over standard protocols.\n- T1071.004 (DNS): Noticed UDP/53 traffic in network telemetry, indicating possible command and control channels using DNS tunneling.\n- T1012 (Query Registry): Detected based on four registry reads observed during behavior analysis.\n- T1083 (File and Directory Discovery): Indicated by filesystem enumeration and access traces found within the behavior summary.\n\n**3. Evidence-Based Reasoning:**\nThe presence of process injection techniques was determined through API call sequences involving NtAllocateVirtualMemory, NtMapViewOfSection, and other related functions that create new sections in memory for injecting code into legitimate processes. These activities are consistent with how Emotet operates to maintain persistence and execute its malicious payload without being easily detected.\n\n**4. Risk Rating Justification:**\nThis sample has been assigned a High risk rating due to several factors:\n- Its ability to perform process injection, which allows it to hide behind trusted processes and avoid detection.\n- The use of digital signing indicates some degree of sophistication in avoiding security controls.\n- The large number of external IP addresses observed suggests widespread distribution or targeting efforts.\n\n**5. Response and Containment Actions:**\n- Implement endpoint protection solutions capable of detecting and blocking process injection techniques.\n- Conduct regular updates to signature databases to ensure they include the latest threat intelligence about Emotet variants.\n- Deploy network segmentation strategies to limit lateral movement if infection occurs within your environment.\n- Educate users on recognizing phishing emails, which often serve as initial vectors for Emotet deployment.",
+      "latency": 34.23
+    },
+    {
+      "id": "15",
+      "family": "Formbook",
+      "metrics": {
+        "exact": {
+          "p": 0.625,
+          "r": 1.0,
+          "f1": 0.769
+        },
+        "parent": {
+          "p": 0.571,
+          "r": 1.0,
+          "f1": 0.727
+        },
+        "predicted": [
+          "T1003",
+          "T1012",
+          "T1055",
+          "T1059",
+          "T1071",
+          "T1071.004",
+          "T1083",
+          "T1497"
+        ],
+        "gt": [
+          "T1012",
+          "T1055",
+          "T1071",
+          "T1071.004",
+          "T1083"
+        ]
+      },
+      "output": "**1. Malware Family Identification:**\nBased on the provided evidence, this sample belongs to the `Formbook` family with high confidence (85%), as indicated by Yara rule matches and known family characteristics. Additionally, there's an unknown family match with lower confidence (15%).\n\n**2. MITRE ATT&CK Techniques Observed:**\n- T1055: Process Injection - Confirmed via process injection API calls and memory payload extraction.\n- T1071: Application Layer Protocol - Observed outbound communications to multiple IP addresses.\n- T1071.004: DNS - Noted UDP/53 traffic in network telemetry.\n- T1012: Query Registry - Enumerated 78 registry keys during behavior analysis.\n- T1083: File and Directory Discovery - Filesystem enumeration and access traces found.\n- T1497: Virtualization/Sandbox Evasion - Defensive measures like checking for debuggers and FIPS policies.\n- T1003: OS Credential Dumping - Potentially attempted credential dumping based on suspicious API calls.\n- T1059: Command and Scripting Interpreter - Execution of additional commands noted.\n\n**3. Evidence-Based Reasoning:**\n- Process Injection (T1055): The sample exhibits signs of dynamic code loading into another process, which aligns with T1055. This was identified through NtMapViewOfSection and NtUnmapViewOfSection API calls that map sections between processes.\n- Network Activity (T1071): Multiple outbound connections to different IP addresses suggest communication capabilities consistent with T1071.\n- Defense Evasion (T1497): Attempts to hide its presence include querying system information and attempting to enumerate credentials.\n\n**4. Risk Rating:**\nThe risk rating is CRITICAL due to the following factors:\n- High-confidence family matching with known malicious intent.\n- Extensive network activity indicating potential command and control channels.\n- Advanced evasion techniques suggesting sophisticated threat actor involvement.\n\n**5. Response and Containment:**\nRecommend immediate isolation of affected systems, full forensic imaging, and incident response team activation. Implement network segmentation to prevent lateral movement. Deploy endpoint protection solutions with updated definitions targeting Formbook variants.",
+      "latency": 26.05
+    },
+    {
+      "id": "16",
+      "family": "Dridex",
+      "metrics": {
+        "exact": {
+          "p": 1.0,
+          "r": 1.0,
+          "f1": 1.0
+        },
+        "parent": {
+          "p": 1.0,
+          "r": 1.0,
+          "f1": 1.0
+        },
+        "predicted": [
+          "T1012",
+          "T1055",
+          "T1071",
+          "T1071.004",
+          "T1083"
+        ],
+        "gt": [
+          "T1012",
+          "T1055",
+          "T1071",
+          "T1071.004",
+          "T1083"
+        ]
+      },
+      "output": "**1. Malware Family Identification:**\nBased on multiple Yara rules matches and KSPN-mapped TTPs, this sample belongs to the DridexV4 family with high confidence (68%). The presence of DridexV4 payloads and configurations further supports this classification.\n\n**2. MITRE ATT&CK Techniques Observed:**\n- T1055: Process Injection - Evidenced by suspicious API calls like NtAllocateVirtualMemory, NtMapViewOfSection, and runtime code staging detected in memory payloads.\n- T1071: Application Layer Protocol - Network communications observed towards various IP addresses including CDN services.\n- T1071.004: DNS - UDP/53 traffic observed in network telemetry.\n- T1012: Query Registry - Multiple registry reads identified in behavior summary.\n- T1083: File and Directory Discovery - Filesystem enumeration and access traces found in behavior summary.\n\n**3. Evidence-Based Reasoning:**\nThe sample exhibits high-entropy sections suggesting packing or encryption, which aligns with known DridexV4 characteristics. Additionally, the presence of DridexLoader family matches indicates potential loader functionality within the same binary.\n\n**4. Risk Rating:**\nRisk Level: Critical\nJustification: This sample demonstrates advanced persistence mechanisms through process injection capabilities (T1055), credential theft behaviors, and extensive network communication patterns that could lead to significant operational disruption if deployed in production environments.\n\n**5. Response Actions:**\n- Quarantine affected systems immediately.\n- Conduct forensic analysis of infected endpoints.\n- Implement enhanced monitoring for similar activities.\n- Update endpoint protection solutions with new signatures based on extracted IOCs.",
+      "latency": 19.5
+    }
+  ]
+}

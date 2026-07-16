@@ -1,0 +1,389 @@
+{
+  "timestamp": "2026-07-15T18:24:40.626666",
+  "n": 12,
+  "mean": {
+    "exact": 0.408,
+    "parent": 0.514
+  },
+  "per_sample": [
+    {
+      "id": "12",
+      "family": "Emotet",
+      "metrics": {
+        "exact": {
+          "p": 0.8,
+          "r": 1.0,
+          "f1": 0.889
+        },
+        "parent": {
+          "p": 0.75,
+          "r": 1.0,
+          "f1": 0.857
+        },
+        "predicted": [
+          "T1012",
+          "T1055",
+          "T1071",
+          "T1071.004",
+          "T1083"
+        ],
+        "gt": [
+          "T1012",
+          "T1071",
+          "T1071.004",
+          "T1083"
+        ]
+      },
+      "output": "**1. Malware Family Identification:**\nBased on multiple sources including Yara rules and kspn validation with high confidence levels, this sample belongs to the Emotet family. The Yara rule matches specifically identify it as Emotet, while kspn provides additional confirmation with a confidence of 74%. This aligns with known characteristics such as process injection capabilities and outbound network communication patterns typical of Emotet variants.\n\n**2. MITRE ATT&CK Techniques Observed:**\n- T1055 (Process Injection): Confirmed through suspicious API calls like NtAllocateVirtualMemory, NtMapViewOfSection, and output debug strings indicating potential code injection attempts.\n- T1071 (Application Layer Protocol): Observed via outbound communications towards 20.42.65.91, which suggests data exfiltration over standard protocols.\n- T1071.004 (DNS): Noticed UDP/53 traffic in network telemetry, indicating possible command and control channels using DNS tunneling.\n- T1012 (Query Registry): Detected based on four registry reads observed during behavior analysis.\n- T1083 (File and Directory Discovery): Indicated by filesystem enumeration and access traces found within the behavior summary.\n\n**3. Evidence-Based Reasoning:**\nThe presence of process injection techniques was determined through API call sequences involving NtAllocateVirtualMemory, NtMapViewOfSection, and other related functions that create new sections in memory for injecting code into legitimate processes. These activities are consistent with how Emotet operates to maintain persistence and execute its malicious payload without being easily detected.\n\n**4. Risk Rating Justification:**\nThis sample has been assigned a High risk rating due to several factors:\n- Its ability to perform process injection, which allows it to hide behind trusted processes and avoid detection.\n- The use of digital signing indicates some degree of sophistication in avoiding security controls.\n- The large number of external IP addresses observed suggests widespread distribution or targeting efforts.\n\n**5. Response and Containment Actions:**\n- Implement endpoint protection solutions capable of detecting and blocking process injection techniques.\n- Conduct regular updates to signature databases to ensure they include the latest threat intelligence about Emotet variants.\n- Deploy network segmentation strategies to limit lateral movement if infection occurs within your environment.\n- Educate users on recognizing phishing emails, which often serve as initial vectors for Emotet deployment.",
+      "latency": 34.32
+    },
+    {
+      "id": "15",
+      "family": "Formbook",
+      "metrics": {
+        "exact": {
+          "p": 0.833,
+          "r": 1.0,
+          "f1": 0.909
+        },
+        "parent": {
+          "p": 1.0,
+          "r": 1.0,
+          "f1": 1.0
+        },
+        "predicted": [
+          "T1012",
+          "T1055",
+          "T1055.001",
+          "T1071",
+          "T1071.004",
+          "T1083"
+        ],
+        "gt": [
+          "T1012",
+          "T1055",
+          "T1071",
+          "T1071.004",
+          "T1083"
+        ]
+      },
+      "output": "**1. Malware Family Identification:**\nBased on the provided evidence, this sample belongs to the `Formbook` family with high confidence (85%), as indicated by YARA rule matching and known static features such as Imphash value. Additionally, there's a low-confidence match (15%) for an unknown family based on KSPN-mapped TTPs.\n\n**2. MITRE ATT&CK Techniques Observed:**\n- T1055.001 (Process Injection): Confirmed through NtMapViewOfSection and NtUnmapViewOfSection calls, which are commonly used for process hollowing or reflective loading of malicious code into legitimate processes like svchost.exe.\n- T1071 (Application Layer Protocol): Observed outbound communications to multiple IP addresses, suggesting potential command and control (C2) channels.\n- T1071.004 (DNS): Network telemetry shows UDP/53 traffic, indicating possible domain generation algorithm (DGA) usage or other DNS tunneling techniques.\n- T1012 (Query Registry): Multiple registry reads observed, potentially gathering system information for persistence mechanisms.\n- T1083 (File and Directory Discovery): Filesystem enumeration activities noted in behavior summary, likely scanning for sensitive files or directories.\n\n**3. Evidence-Based Reasoning:**\nThe suspicious API behaviors listed under T1055 provide strong evidence of process injection capabilities. The presence of multiple dropped files suggests that the malware may be deploying additional components or modules. The network communication patterns align with typical C2 infrastructure setup.\n\n**4. Risk Rating:**\nGiven the observed capabilities, including process injection, extensive network activity, and suspected lateral movement attempts, this sample poses a significant threat to systems it infects. Therefore, I recommend assigning a risk rating of **Critical**.\n\n**5. Response and Containment:**\nImmediate action should include isolating affected hosts from the network, conducting forensic analysis to identify any compromised credentials or data exfiltration, updating endpoint protection solutions with new signatures derived from this sample, and implementing enhanced monitoring for similar threats across your environment.",
+      "latency": 25.61
+    },
+    {
+      "id": "16",
+      "family": "Dridex",
+      "metrics": {
+        "exact": {
+          "p": 1.0,
+          "r": 1.0,
+          "f1": 1.0
+        },
+        "parent": {
+          "p": 1.0,
+          "r": 1.0,
+          "f1": 1.0
+        },
+        "predicted": [
+          "T1012",
+          "T1055",
+          "T1071",
+          "T1071.004",
+          "T1083"
+        ],
+        "gt": [
+          "T1012",
+          "T1055",
+          "T1071",
+          "T1071.004",
+          "T1083"
+        ]
+      },
+      "output": "**1. Malware Family Identification:**\nBased on multiple Yara rules matches and KSPN-mapped TTPs, this sample belongs to the DridexV4 family with high confidence (68%). The presence of DridexV4 payloads and configurations further supports this classification.\n\n**2. MITRE ATT&CK Techniques Observed:**\n- T1055: Process Injection - Evidenced by suspicious API calls like NtAllocateVirtualMemory, NtMapViewOfSection, and runtime code staging detected in memory payloads.\n- T1071: Application Layer Protocol - Network communications observed towards various IP addresses including CDN services.\n- T1071.004: DNS - UDP/53 traffic observed in network telemetry.\n- T1012: Query Registry - Multiple registry reads identified in behavior summary.\n- T1083: File and Directory Discovery - Filesystem enumeration and access traces found in behavior summary.\n\n**3. Evidence-Based Reasoning:**\nThe sample exhibits high-entropy sections suggesting packing or encryption, which aligns with known DridexV4 characteristics. Additionally, the presence of DridexLoader family matches indicates potential loader functionality within the same binary.\n\n**4. Risk Rating:**\nRisk Level: Critical\nJustification: This sample demonstrates advanced persistence mechanisms through process injection capabilities (T1055), credential theft behaviors, and extensive network communication patterns that could lead to significant operational disruption if deployed in production environments.\n\n**5. Response Actions:**\n- Quarantine affected systems immediately.\n- Conduct forensic analysis of infected endpoints.\n- Implement enhanced monitoring for similar activities.\n- Update endpoint protection solutions with new signatures based on extracted IOCs.",
+      "latency": 20.97
+    },
+    {
+      "id": "601",
+      "family": "AgentTesla",
+      "metrics": {
+        "exact": {
+          "p": 0.091,
+          "r": 0.2,
+          "f1": 0.125
+        },
+        "parent": {
+          "p": 0.3,
+          "r": 0.6,
+          "f1": 0.4
+        },
+        "predicted": [
+          "T1055",
+          "T1055.001",
+          "T1059",
+          "T1071.001",
+          "T1083",
+          "T1106",
+          "T1204",
+          "T1497",
+          "T1546.012",
+          "T1547",
+          "T1622"
+        ],
+        "gt": [
+          "T1012",
+          "T1059.001",
+          "T1071.004",
+          "T1083",
+          "T1112"
+        ]
+      },
+      "output": "**Malware Analysis Report**\n\n**1. Malware Family Identification:**\nBased on multiple Yara matches and behavioral indicators, this sample belongs to the AgentTesla family with high confidence (85%). The presence of AgentTeslaV3 and V5 payloads further supports this classification.\n\n**2. MITRE ATT&CK Technique Mapping:**\n- T1055.001: Process Injection - Detected through NtMapViewOfSection calls\n- T1055: Process Injection - Additional evidence includes NtAllocateVirtualMemory and base address manipulation\n- T1059: Command and Scripting Interpreter - Powershell execution detected via CreateProcessW\n- T1106: Native API Calling - Direct system call usage identified\n- T1547: Boot or Logon Autostart Execution - Persistence mechanism through scheduled tasks creation\n- T1204: User Execution - Dropper activity in user directories\n- T1546.012: Defense Evasion - IFEO debugger hijack attempt\n- T1083: File and Directory Discovery - System information gathering\n- T1497: Virtualization/Sandbox Evasion - Potential sandbox detection strings found\n- T1622: Reflective Code Loading - Payload extraction patterns suggest reflective loading capabilities\n\n**3. Evidence-Based Reasoning:**\nThe sample exhibits several suspicious behaviors consistent with AgentTesla's known tactics. Network communication to external IP addresses indicates potential C2 channels (T1071.001), while persistence mechanisms like scheduled task creation demonstrate long-term access strategies (T1547). The use of PowerShell suggests script-based operations that could be used for various purposes including reconnaissance or lateral movement.\n\n**4. Risk Rating:**\nRisk Level: Critical\nJustification: Multiple high-severity techniques combined with extensive network communications indicate significant threat potential. The sample demonstrates advanced evasion capabilities and likely contains sensitive data exfiltration routines.\n\n**5. Response Recommendations:**\nImmediate isolation of affected systems is recommended due to the critical risk assessment. Implement additional monitoring for unusual outbound connections and review all recently modified scheduled tasks. Consider deploying endpoint detection solutions capable of identifying similar behavioral patterns in real-time.",
+      "latency": 29.03
+    },
+    {
+      "id": "603",
+      "family": "Conti",
+      "metrics": {
+        "exact": {
+          "p": 0.0,
+          "r": 0.0,
+          "f1": 0.0
+        },
+        "parent": {
+          "p": 0.333,
+          "r": 1.0,
+          "f1": 0.5
+        },
+        "predicted": [
+          "T1055",
+          "T1071.001",
+          "T1547.001"
+        ],
+        "gt": [
+          "T1071.004"
+        ]
+      },
+      "output": "**1. Malware Family Identification:**\nBased on the Yara rule matching and static analysis results, this sample belongs to the Conti ransomware family with high confidence (85%). The hash of the file matches known Conti variants in our threat intelligence database.\n\n**2. MITRE ATT&CK Techniques Observed:**\n- T1055: Process Injection - Detected through NtAllocateVirtualMemory API call used for memory allocation, which is commonly associated with process hollowing or similar injection techniques.\n- T1071.001: Application Layer Protocol: Web Protocols - Not explicitly mentioned but could be inferred based on network activity patterns if available.\n- T1547.001: Boot or Logon Autostart Execution: Registry Run Keys/Startup Folder - This was not directly observed, so it's possible that the sample uses other persistence mechanisms.\n\n**3. Evidence-Based Reasoning:**\n- T1055: The NtAllocateVirtualMemory API call is indicative of process injection because it allows for allocating memory within another process's address space, often used to inject malicious code into legitimate processes.\n- T1071.001: If there were any web protocol communications detected during the sandbox session, they would be classified under this technique. However, no such data was provided in the report.\n- T1547.001: Persistence via registry run keys or startup folders typically involves writing entries to those locations to ensure execution upon system boot or user login. Since this wasn't observed, alternative methods might have been employed.\n\n**4. Risk Rating:**\nThe risk rating is CRITICAL due to the following factors:\n- High Confidence Family Match (Conti)\n- Significant Network Activity Patterns\n- Use of System Level APIs for Potential Privilege Escalation\n\n**5. Recommended Response Actions:**\n- Isolate affected systems immediately to prevent lateral movement.\n- Conduct forensic analysis on endpoints where the sample executed.\n- Update endpoint protection solutions with new signatures based on this variant.\n- Implement additional monitoring for suspicious process creation events and network traffic anomalies.",
+      "latency": 25.6
+    },
+    {
+      "id": "604",
+      "family": "Conti",
+      "metrics": {
+        "exact": {
+          "p": 0.167,
+          "r": 0.25,
+          "f1": 0.2
+        },
+        "parent": {
+          "p": 0.333,
+          "r": 0.5,
+          "f1": 0.4
+        },
+        "predicted": [
+          "T1055",
+          "T1059",
+          "T1071.001",
+          "T1083",
+          "T1204.002",
+          "T1547.001"
+        ],
+        "gt": [
+          "T1012",
+          "T1071.004",
+          "T1083",
+          "T1112"
+        ]
+      },
+      "output": "**1. Malware Family Identification:**\nBased on the YARA rule matching and behavioral indicators, this sample belongs to the Conti ransomware family with a confidence level of 85%. The signature matches the known patterns associated with Conti variants.\n\n**2. Observed MITRE ATT&CK Techniques:**\n- T1055 (Process Injection): Suspicious API calls for process manipulation (NtAllocateVirtualMemory, NtMapViewOfSection) indicate potential code injection activities.\n- T1059 (Command and Scripting Interpreter): Multiple instances of CreateProcessW suggest script execution capabilities.\n- T1547.001 (Boot or Logon Autostart Execution): Registry modifications in HKEY_LOCAL_MACHINE suggest persistence mechanisms.\n- T1204.002 (User Execution): PowerShell script dropping indicates user interaction requirements.\n- T1083 (File and Directory Discovery): NtQueryAttributesFile suggests reconnaissance activities.\n- T1071.001 (Application Layer Protocol): WinHttp* API calls may indicate communication with command-and-control servers.\n\n**3. Evidence-Based Reasoning:**\nThe suspicious API behaviors are directly linked to the identified techniques through their documented usage in malware analysis literature and threat intelligence reports. For instance, NtAllocateVirtualMemory followed by NtMapViewOfSection typically precedes memory-based process injection attacks.\n\n**4. Risk Rating:** High risk due to multiple high-severity indicators including process injection, persistence mechanisms, and potential lateral movement capabilities.\n\n**5. Response Actions:**\n- Quarantine affected systems immediately.\n- Conduct forensic analysis of disk images for additional IoCs.\n- Implement network segmentation to limit propagation.\n- Deploy endpoint detection rules targeting Conti families' known signatures.",
+      "latency": 23.36
+    },
+    {
+      "id": "605",
+      "family": "Conti",
+      "metrics": {
+        "exact": {
+          "p": 0.167,
+          "r": 0.25,
+          "f1": 0.2
+        },
+        "parent": {
+          "p": 0.167,
+          "r": 0.25,
+          "f1": 0.2
+        },
+        "predicted": [
+          "T1021",
+          "T1041",
+          "T1055",
+          "T1083",
+          "T1497",
+          "T1547"
+        ],
+        "gt": [
+          "T1012",
+          "T1071.004",
+          "T1083",
+          "T1112"
+        ]
+      },
+      "output": "**1. Malware Family Identification:**\nBased on the Yara rule matching and static analysis results, this sample belongs to the Conti ransomware family with high confidence (85%). The unique hash values align with known Conti variants, further supporting this classification.\n\n**2. Observed MITRE ATT&CK Techniques:**\n- T1055: Process Injection - Evidenced by NtAllocateVirtualMemory and NtMapViewOfSection calls initiated by rundll32.exe.\n- T1497: Virtualization/Sandbox Evasion - Indicated by NtQuerySystemInformation call targeting SystemInformationClass 164, which could be used to detect virtual environments.\n- T1083: File and Directory Discovery - Supported by NtQueryAttributesFile API usage for file information retrieval.\n\n**3. Evidence-Based Reasoning:**\nThe suspicious API behaviors are directly linked to potential data exfiltration (T1041), lateral movement (T1021), and persistence mechanisms (T1547). These activities suggest that the malware is designed for stealthy operations within compromised systems.\n\n**4. Risk Rating:**\nGiven the combination of advanced evasion techniques, encryption capabilities, and potential data theft indicators, this sample poses a significant threat to organizational assets. Therefore, it warrants a risk rating of CRITICAL.\n\n**5. Recommended Response Actions:**\n- Isolate affected endpoints immediately to prevent lateral spread.\n- Conduct forensic analysis using specialized tools like Volatility or Rekall for memory dump examination.\n- Implement enhanced monitoring for similar activity patterns across the environment.\n- Update endpoint protection solutions with updated signatures based on this sample's characteristics.",
+      "latency": 20.95
+    },
+    {
+      "id": "607",
+      "family": "Conti",
+      "metrics": {
+        "exact": {
+          "p": 0.25,
+          "r": 0.5,
+          "f1": 0.333
+        },
+        "parent": {
+          "p": 0.25,
+          "r": 0.5,
+          "f1": 0.333
+        },
+        "predicted": [
+          "T1027.002",
+          "T1055",
+          "T1083",
+          "T1547.001"
+        ],
+        "gt": [
+          "T1071.004",
+          "T1083"
+        ]
+      },
+      "output": "**1. Malware Family Identification:**\nBased on multiple indicators including YARA rules, static PE characteristics, and dynamic behavior patterns, this sample has been classified as `Conti` with high confidence (85%+). The presence of known Conti family signatures in both YARA detections supports this classification.\n\n**2. MITRE ATT&CK Technique Mapping:**\n- T1055: Process Injection - Confirmed through observation of NtAllocateVirtualMemory calls used for memory allocation within another process context.\n- T1027.002: Obfuscated Files or Information - Indicated by high entropy values in sections like .data (7.29), suggesting encryption or packing.\n- T1083: File and Directory Discovery - Not explicitly mentioned but implied by network activity involving DNS queries to external domains.\n- T1547.001: Boot or Logon Autostart Execution - Not directly observed, no persistence mechanisms detected.\n\n**3. Evidence Support:**\n- T1055: NtAllocateVirtualMemory call pattern in API sequence data (Section 'API SEQUENCE PATTERNS').\n- T1027.002: Entropy measurements above standard thresholds for packed/encrypted content (Section 'BEHAVIORAL INDICATORS').\n- T1083: Network activity involving DNS queries to external domains (Section 'NETWORK' and 'IOCs').\n\n**4. Risk Rating:** CRITICAL\nJustification: Multiple high-confidence indicators of advanced persistent threat capabilities, including process injection, obfuscation, and potential command-and-control communication. The sample exhibits behaviors consistent with sophisticated malware families targeting enterprise environments.\n\n**5. Response Actions:**\n- Isolate affected systems immediately to prevent lateral movement.\n- Conduct forensic analysis using specialized tools capable of handling packed binaries.\n- Implement enhanced monitoring for similar indicators across the environment.\n- Consider deploying additional endpoint protection measures tailored to detect Conti variants.",
+      "latency": 24.39
+    },
+    {
+      "id": "608",
+      "family": "Conti",
+      "metrics": {
+        "exact": {
+          "p": 0.4,
+          "r": 0.4,
+          "f1": 0.4
+        },
+        "parent": {
+          "p": 0.5,
+          "r": 0.4,
+          "f1": 0.444
+        },
+        "predicted": [
+          "T1003",
+          "T1055",
+          "T1059",
+          "T1059.003",
+          "T1083"
+        ],
+        "gt": [
+          "T1012",
+          "T1059.003",
+          "T1071.004",
+          "T1083",
+          "T1112"
+        ]
+      },
+      "output": "1. **Malware Family Identification:** Based on the Yara rule matching \"Conti\" with high confidence (85%), this sample belongs to the Conti ransomware family. The static PE characteristics also align with known Conti variants.\n\n2. **Observed MITRE ATT&CK Techniques:**\n   - T1055 (Process Injection): Indicated by suspicious API calls like `NtAllocateVirtualMemory` and `NtMapViewOfSection`, which suggest memory manipulation for code injection.\n   - T1083 (File and Directory Discovery): Detected through `NtQueryAttributesFile`, indicating potential reconnaissance of file attributes.\n   - T1003 (OS Credential Dumping): Not explicitly mentioned in the report but implied by `NtCreateFile` call targeting sensitive locations like Globalization folders.\n   - T1059 (Command and Scripting Interpreter): Confirmed via multiple instances of command execution, including `net.exe` and `vssadmin`.\n   - T1059.003 (Cmd Shell): Specifically noted as 'Cmd shell execution' with evidence provided.\n\n3. **Evidence-Based Reasoning:**\n   - T1055: The sequence of `NtAllocateVirtualMemory` followed by `NtMapViewOfSection` indicates that the malware is allocating memory regions within another process, likely injecting its own code into it. This matches the definition of process injection under T1055.\n   - T1083: The `NtQueryAttributesFile` call suggests scanning for file attributes, which could be part of reconnaissance activities before further exploitation steps.\n   - T1003: While not directly mentioned, the presence of `NtCreateFile` calls targeting potentially sensitive paths implies credential dumping attempts.\n   - T1059: Multiple instances of command execution are documented, confirming this technique.\n\n4. **Risk Rating:** High risk due to confirmed Conti ransomware variant, process injection capabilities, and extensive network activity indicative of lateral movement or data exfiltration.\n\n5. **Recommended Response Actions:**\n   - Isolate affected systems immediately to prevent spread.\n   - Conduct forensic analysis using tools capable of handling encrypted binaries.\n   - Implement enhanced monitoring for similar behaviors across the environment.\n   - Consider deploying additional endpoint protection measures and updating incident response playbooks based on findings.",
+      "latency": 28.91
+    },
+    {
+      "id": "609",
+      "family": "Dridex",
+      "metrics": {
+        "exact": {
+          "p": 0.0,
+          "r": 0.0,
+          "f1": 0.0
+        },
+        "parent": {
+          "p": 0.0,
+          "r": 0.0,
+          "f1": 0.0
+        },
+        "predicted": [
+          "T1003",
+          "T1027.002",
+          "T1055",
+          "T1497"
+        ],
+        "gt": [
+          "T1012",
+          "T1071.004",
+          "T1083",
+          "T1112"
+        ]
+      },
+      "output": "**1. Malware Family Identification:**\nBased on multiple Yara rule matches including `DridexV4` and `DridexLoader`, this sample belongs to the Dridex banking trojan family with high confidence (>90%). The static PE characteristics also align with known Dridex variants.\n\n**2. MITRE ATT&CK Techniques Observed:**\n- T1055 (Process Injection): Confirmed through suspicious API calls like NtAllocateVirtualMemory and NtMapViewOfSection in rundll32.exe context.\n- T1027.002 (Obfuscated Files or Information - Packing): Indicated by high entropy sections detected in the PE file.\n- T1497 (Virtualization/Sandbox Evasion): Suspected due to defensive API calls like NtQuerySystemInformation and NtQueryAttributesFile.\n- T1003 (OS Credential Dumping): Possible based on NtCreateFile call targeting ntdll.dll, which could indicate credential dumping attempts.\n\n**3. Evidence-Based Reasoning:**\n[T1055]: The combination of memory allocation and view mapping suggests code injection into legitimate processes. This is consistent with Dridex's modus operandi for persistence and stealth.\n[T1027.002]: Entropy values above 7.0 typically indicate encryption or packing, supporting the hypothesis that this sample employs anti-analysis techniques.\n[T1497]: Defensive API calls suggest the malware may be checking for virtual environments before proceeding with its main functionality.\n\n**4. Risk Rating:**\nRisk Level: **HIGH** - Due to confirmed process injection capabilities, potential data exfiltration via network connections, and presence of obfuscation techniques.\n\n**5. Response Actions:**\n- Quarantine affected systems immediately.\n- Analyze network traffic logs for any suspicious outbound communications.\n- Implement enhanced monitoring for similar indicators across the environment.\n- Consider deploying additional endpoint protection measures focusing on detecting process hollowing and other advanced injection methods.",
+      "latency": 25.07
+    },
+    {
+      "id": "610",
+      "family": "Emotet",
+      "metrics": {
+        "exact": {
+          "p": 0.125,
+          "r": 0.25,
+          "f1": 0.167
+        },
+        "parent": {
+          "p": 0.286,
+          "r": 0.5,
+          "f1": 0.364
+        },
+        "predicted": [
+          "T1003",
+          "T1027.002",
+          "T1055",
+          "T1071",
+          "T1071.001",
+          "T1083",
+          "T1497.003",
+          "T1546.011"
+        ],
+        "gt": [
+          "T1012",
+          "T1071.004",
+          "T1083",
+          "T1112"
+        ]
+      },
+      "output": "**1. Malware Family Identification:**\nBased on multiple Yara rule matches and high confidence scores, this sample belongs to the Emotet malware family with a confidence level of 85%. The indicators include suspicious API calls such as process injection (T1055), persistence mechanisms like setwindowshookexa (T1546.011), and potential data exfiltration through internetopenw and winhttpenumerateurl (T1071.001).\n\n**2. MITRE ATT&CK Techniques Observed:**\n- T1055: Process Injection - Evidenced by NtAllocateVirtualMemory and NtMapViewOfSection API calls.\n- T1546.011: Application Layer Protocol - Indicated by SetWindowsHookExA call.\n- T1027.002: Automated Exfiltration - Suspected due to high-entropy sections in the binary.\n- T1083: File and Directory Discovery - Not explicitly mentioned but implied by NtQueryAttributesFile API.\n- T1497.003: Virtualization/Sandbox Evasion - Possible based on delay execution attempts.\n- T1003: OS Credential Dumping - Potentially present given NtCreateFile access rights.\n- T1071: Application Layer Protocol - Confirmed via InternetOpenW and WinHttpOpen API calls.\n\n**3. Evidence-Based Reasoning:**\nThe sample exhibits several behaviors consistent with Emotet's known tactics, including process injection for code execution within legitimate processes, setting up hooks to monitor user input events, potentially stealing credentials using file creation operations, and establishing command-and-control communications over HTTP protocols. These activities align with the documented capabilities of Emotet variants.\n\n**4. Risk Rating Justification:**\nThis sample has been assigned a risk rating of CRITICAL due to its demonstrated ability to perform process injection, establish persistence mechanisms, and communicate with external servers for further instructions. Its high entropic sections suggest packing or encryption, which could hinder static analysis efforts. Additionally, the presence of multiple suspicious API calls indicates advanced obfuscation techniques designed to evade detection systems.\n\n**5. Recommended Response Actions:**\n- Isolate affected hosts immediately to prevent lateral movement.\n- Conduct memory forensics on infected machines to identify injected code segments.\n- Implement enhanced logging and monitoring for unusual network traffic patterns.\n- Deploy updated antivirus solutions capable of detecting similar threats proactively.\n- Consider implementing application whitelisting strategies to restrict unauthorized software installations.",
+      "latency": 30.61
+    },
+    {
+      "id": "613",
+      "family": "Formbook",
+      "metrics": {
+        "exact": {
+          "p": 0.6,
+          "r": 0.75,
+          "f1": 0.667
+        },
+        "parent": {
+          "p": 0.6,
+          "r": 0.75,
+          "f1": 0.667
+        },
+        "predicted": [
+          "T1012",
+          "T1055",
+          "T1071.004",
+          "T1083",
+          "T1546.011"
+        ],
+        "gt": [
+          "T1012",
+          "T1071.004",
+          "T1083",
+          "T1112"
+        ]
+      },
+      "output": "**1. Malware Family Identification:**\nBased on multiple Yara rule matches and KSPN-mapped TTPs, this sample belongs to the Formbook malware family with high confidence (78%). The presence of characteristic strings like 'Formbook' in the payload confirms its identity as a variant within this family.\n\n**2. MITRE ATT&CK Techniques Observed:**\n- T1055: Process Injection - Evidence: Memory manipulation API calls, KSPN-mapped TTP indicating process injection capabilities.\n- T1071.004: DNS - Network communication to known malicious domains.\n- T1546.011: Boot or Logon Autostart Execution - Persistence mechanism through hook installation.\n- T1083: File and Directory Discovery - System information gathering via registry reads.\n- T1012: Query Registry - Additional reconnaissance activities.\n\n**3. Evidence-Based Reasoning:**\nThe suspicious API behaviors such as process injection (T1055), persistence mechanisms (T1546.011), and memory manipulation align with typical Formbook functionality. Network communications to known malicious domains further support the conclusion that this sample exhibits command-and-control capabilities consistent with T1071.004.\n\n**4. Risk Rating:** High - Due to the combination of process injection, persistence mechanisms, and potential data exfiltration through network connections, which pose significant risks to system integrity and confidentiality.\n\n**5. Recommended Response:**\nImplement immediate isolation of affected systems, conduct forensic analysis focusing on memory dumps for detailed examination of injected code segments, update endpoint protection with latest Formbook signatures, and consider deploying additional monitoring tools targeting process injection patterns identified in this sample.",
+      "latency": 21.32
+    }
+  ]
+}

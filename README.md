@@ -68,13 +68,21 @@ external service credentials when enabled.
 | CyberMetric-80, unified-v2 | 91.25% (73/80) | Runs 1-2 |
 | ATT&CK behavior-to-technique MCQ | 80% (24/30) | Run 3 |
 | Three real malscore-10 CAPE samples | Exact F1 0.868; Parent F1 0.841 | Run 7 |
+| Twelve real CAPE samples, 5 families *(preliminary)* | Exact F1 0.408; Parent F1 0.514 | [journal-artifacts/evaluation/](journal-artifacts/evaluation/) |
 | Inference-only improvement | Parent F1 0.095 -> 0.841 | Runs 4-7 |
 | Adversarial prompt suite | 73% (11/15) | Run 10 |
 | MI300X LoRA throughput | 15.36 tokens/s | Run 9 |
+| SECURE benchmark, MAET/CWET (independent, 0% overlap) | 87.78% / 87.88% vs. base Mixtral 80.9% / 83.4% | [journal-artifacts/evaluation/](journal-artifacts/evaluation/) |
+| CyberSOCEval malware-analysis / threat-intel (independent) | 0.415 / 0.555 mean Jaccard | [journal-artifacts/evaluation/](journal-artifacts/evaluation/) |
 
 Commands, configurations, intermediate results, and failure notes are recorded
 in [BENCHMARK_RESULTS_LOG.md](BENCHMARK_RESULTS_LOG.md). Raw per-run outputs are
-also published with the dataset.
+also published with the dataset. The twelve-sample CAPE expansion and the
+independent SECURE/CyberSOCEval benchmarks (chosen specifically because they
+share no data with CyberMetric or the training corpus) are documented with raw
+predictions and logs in [journal-artifacts/evaluation/](journal-artifacts/evaluation/);
+the CAPE n=12 result is marked preliminary there pending a ground-truth
+hand-verification pass on the 9 newly added samples.
 
 The central inference result required no retraining. It came from aligning
 prompts with Mixtral's native `[INST]...[/INST]` template, increasing the
@@ -89,6 +97,7 @@ tokenizer context window from 3,072 to 8,192, and improving evidence extraction.
 | Training corpus and benchmark outputs | [umer07/fathom-expert-data](https://huggingface.co/datasets/umer07/fathom-expert-data) |
 | Journal submission artifacts | [journal-artifacts/](journal-artifacts/) |
 | Twelve-run benchmark record | [BENCHMARK_RESULTS_LOG.md](BENCHMARK_RESULTS_LOG.md) |
+| n=12 CAPE expansion + independent-benchmark evaluation | [journal-artifacts/evaluation/](journal-artifacts/evaluation/) |
 
 The journal bundle contains the curated static-analysis implementation and
 tests, the CAPE v2 dynamic-integration patch and selected modified files, and
