@@ -73,7 +73,7 @@ published baseline for the reason above).
 
 ## 3. CyberSOCEval — domain-aligned independent benchmark
 
-[CyberSOCEval](https://arxiv.org/abs/2503.19107) (Meta CyberSecEval 4) evaluates SOC-analyst
+[CyberSOCEval](https://arxiv.org/abs/2509.20166) (Meta CyberSecEval 4) evaluates SOC-analyst
 reasoning: multi-select MCQ over real sandbox detonation logs and CTI reports. 0% training
 overlap confirmed. No published Mixtral-8x7B baseline exists for this benchmark, so results
 are standalone evidence of domain capability rather than a base-model comparison.
